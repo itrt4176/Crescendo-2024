@@ -28,20 +28,24 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shiftUp(){
-    if(gear < 3){
+    if(gear < 3 && running){
       gear++;
+      start();
     }
   }
 
   public void shiftDown(){
-    if(gear > 0){
+    if(gear > 0 && running){
       gear--;
+      start();
     }
   }
 
-  public void run(){
-    if(!running) {
-    gear = 0;
+  public void start(){
+    if (running == false) {
+      gear = 0;
+      running = true;
+    }
     switch(gear){
       case 0:
       main.set(.25);
@@ -57,10 +61,12 @@ public class ShooterSubsystem extends SubsystemBase {
       break;
     }
   }
-  else if(running) {
+
+  public void stop() {
+    running = false;
     main.set(0);
   }
-  }
+
 
   @Override
   public void periodic() {
