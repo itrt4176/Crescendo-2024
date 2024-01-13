@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  public int gear = 3;
+  public int gear = 0;
   public boolean running = false;
 
   CANSparkMax main = new CANSparkMax(ShooterConstants.kMainShooterMotor, MotorType.kBrushless);
@@ -21,6 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
 
+    main.setInverted(false);
     sub.follow(main, true);
 
     main.setIdleMode(CANSparkMax.IdleMode.kBrake);
