@@ -28,17 +28,31 @@ public class ShooterSubsystem extends SubsystemBase {
     sub.setIdleMode(CANSparkMax.IdleMode.kBrake);
   }
 
+  /**
+   * Increases motor speed and starts the motor if it is not running.
+   */
   public void shiftUp(){
-    if(gear < 3 && running){
+    // if(gear < 3 && running){
+    //   gear++;
+    //   start();
+    // }
+    if(gear < 3){
       gear++;
-      start();
+      switchGear(gear);
     }
   }
 
+  /**
+   * Decreases motor speed and starts the motor
+   */
   public void shiftDown(){
-    if(gear > 0 && running){
+    // if(gear > 0 && running){
+    //   gear--;
+    //   start();
+    // }
+    if(gear > 0){
       gear--;
-      start();
+      switchGear(gear);
     }
   }
 
@@ -46,7 +60,16 @@ public class ShooterSubsystem extends SubsystemBase {
     if (running == false) {
       gear = 0;
       running = true;
+      switchGear(gear);
     }
+  }
+
+  public void stop() {
+    running = false;
+    main.set(0);
+  }
+
+  private void switchGear(int gear) {
     switch(gear){
       case 0:
       main.set(.25);
@@ -62,12 +85,6 @@ public class ShooterSubsystem extends SubsystemBase {
       break;
     }
   }
-
-  public void stop() {
-    running = false;
-    main.set(0);
-  }
-
 
   @Override
   public void periodic() {
