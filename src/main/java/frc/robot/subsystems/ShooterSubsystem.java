@@ -86,6 +86,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public void set(double speed) {
+    running = true;
+    main.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
