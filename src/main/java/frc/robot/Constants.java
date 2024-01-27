@@ -19,5 +19,7 @@ public final class Constants {
   public static class ShooterConstants {
     public static final int kMainShooterMotor = 1;
     public static final int kSubShooterMotor = 2;
+    public static final double SpeakerShotSpeed = .5;
+    public static final double AmpShotSpeed = .5;
   }
 }
