@@ -16,4 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+
+  public static class  IntakeConstants {
+    public static final int INTAKE_MAIN = 14; //placeholder
+    public static final int INTAKE_FOLLOW = 15;//placeholder
+    public static final int SHARP = 0; // placeholder
+    
+  }
 }
