@@ -24,4 +24,11 @@ public final class Constants {
     public static final int SHARP = 0; // placeholder
     
   }
+
+  public static class ShooterConstants {
+    public static final int MAIN_SHOOTER = 1; //placeholder
+    public static final int SUB_SHOOTER = 2; //placeholder
+
+    public static final double SPEAKER_SHOT_SPEED = .5;
+  }
 }

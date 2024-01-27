@@ -15,8 +15,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public int gear = 0;
   public boolean running = false;
 
-  CANSparkMax main = new CANSparkMax(ShooterConstants.kMainShooterMotor, MotorType.kBrushless);
-  CANSparkMax sub = new CANSparkMax(ShooterConstants.kSubShooterMotor, MotorType.kBrushless);
+  CANSparkMax main = new CANSparkMax(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
+  CANSparkMax sub = new CANSparkMax(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
