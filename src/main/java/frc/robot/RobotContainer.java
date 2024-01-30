@@ -10,6 +10,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -53,8 +54,12 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: stop));
+    driverController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: on));
+    driverController.x().onTrue(new InstantCommand(() -> intake.setFakeDistance(-1)));
+    driverController.y().onTrue(new InstantCommand(() -> intake.setFakeDistance(1)));
   }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
