@@ -57,16 +57,21 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void start(){
-    if (running == false) {
-      gear = 0;
-      running = true;
-      switchGear(gear);
-    }
+    // if (running == false) {
+    //   gear = 0;
+    //   running = true;
+    //   switchGear(gear);
+    // }
+
+    setShootSpeed(.75);
   }
 
   public void stop() {
     running = false;
+    main.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    sub.setIdleMode(CANSparkMax.IdleMode.kCoast);
     main.set(0);
+
   }
 
   private void switchGear(int gear) {
@@ -86,8 +91,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public void set(double speed) {
+
+
+  public void setShootSpeed(double speed) {
     running = true;
+    main.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    sub.setIdleMode(CANSparkMax.IdleMode.kBrake);
     main.set(speed);
   }
 

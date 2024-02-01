@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SpeakerShoot;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,6 +31,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
+  private final Climber climber = new Climber();
+  private final ShooterSubsystem shooter = new ShooterSubsystem();
+
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .3);
+  private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -53,7 +64,19 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: stop));
+    driverController.a().toggleOnTrue(intakeCommandD);
+
+    driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake :: stop));
+
+    driverController.y().toggleOnTrue(sShoot);
+
+
+    driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setSpeed(0.3)));
+    driverController.rightBumper().whileFalse(new InstantCommand(() -> climber.setSpeed(0)));
+
+    driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setSpeed(-0.3)));
+    driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setSpeed(0)));
+    
   }
 
   /**

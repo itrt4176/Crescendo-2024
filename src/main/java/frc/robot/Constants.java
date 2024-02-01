@@ -26,9 +26,9 @@ public final class Constants {
   }
 
   public static class ShooterConstants {
-    public static final int MAIN_SHOOTER = 1; //placeholder
-    public static final int SUB_SHOOTER = 2; //placeholder
+    public static final int MAIN_SHOOTER = 17; //placeholder
+    public static final int SUB_SHOOTER = 18; //placeholder
 
-    public static final double SPEAKER_SHOT_SPEED = .5;
+    public static final double SPEAKER_SHOT_SPEED = 1;
   }
 }

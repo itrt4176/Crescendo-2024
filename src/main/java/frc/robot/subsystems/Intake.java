@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -27,27 +28,34 @@ public class Intake extends SubsystemBase {
     mainFx.setNeutralMode(NeutralModeValue.Brake);
     followFx.setNeutralMode(NeutralModeValue.Brake);
 
+    mainFx.setInverted(true);
     followFx.setInverted(true);
     
+  
   }
 
 
   public void setIntakeSpeed(double speed)
   {
     mainFx.set(speed);
-    followFx.set(mainFx.get());//to make up for lack of follow method now
+    followFx.set(speed);//to make up for lack of follow method now
 
   }
 
   public void on()
   {
-    setIntakeSpeed(.4);
+    setIntakeSpeed(.3);
+  }
+
+  public void reverse()
+  {
+    setIntakeSpeed(-.1);
   }
 
   public void stop()
   {
     mainFx.set(0);
-    followFx.set(mainFx.get());
+    followFx.set(0);
   }
 
 
@@ -58,7 +66,7 @@ public class Intake extends SubsystemBase {
 
   public boolean isNoteLoaded()
   {
-    if(getDistance() < 0)//placeholder condition that nedds to be tested
+    if(getDistance() < 13)//placeholder condition that needs to be tested
     {
       return true;
     }
@@ -73,5 +81,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Sensor Reading", getDistance());
   }
 }
