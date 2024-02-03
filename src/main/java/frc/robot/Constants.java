@@ -29,6 +29,12 @@ public final class Constants {
     public static final int MAIN_SHOOTER = 17; //placeholder
     public static final int SUB_SHOOTER = 18; //placeholder
 
-    public static final double SPEAKER_SHOT_SPEED = 1;
+    public static final double SPEAKER_SHOT_SPEED = .75;
+  }
+
+
+  public static class ClimberConstants{
+    public static final int WINCH_MAIN = 25;
+    public static final int WINCH_FOLLOW = 26;
   }
 }
