@@ -34,7 +34,7 @@ public class RobotContainer {
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .3);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .2);
   private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -70,12 +70,15 @@ public class RobotContainer {
 
     driverController.y().toggleOnTrue(sShoot);
 
+    driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
-    driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setSpeed(0.3)));
-    driverController.rightBumper().whileFalse(new InstantCommand(() -> climber.setSpeed(0)));
 
-    driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setSpeed(-0.3)));
-    driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setSpeed(0)));
+    driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
+    driverController.rightBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
+
+    driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(-0.3)));
+    driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
     
   }
 

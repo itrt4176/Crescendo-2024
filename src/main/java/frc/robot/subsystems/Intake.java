@@ -49,7 +49,7 @@ public class Intake extends SubsystemBase {
 
   public void reverse()
   {
-    setIntakeSpeed(-.1);
+    setIntakeSpeed(-.2);
   }
 
   public void stop()
@@ -82,5 +82,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Sensor Reading", getDistance());
+    SmartDashboard.putBoolean("isNoteLoaded", isNoteLoaded());
+    SmartDashboard.putNumber("Intake Current", mainFx.getTorqueCurrent().getValueAsDouble());
   }
 }

@@ -38,7 +38,7 @@ public class IntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    new WaitCommand(.5);
+    // new WaitCommand(.3);
     intake.stop();
   }
 

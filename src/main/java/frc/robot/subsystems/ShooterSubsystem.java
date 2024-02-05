@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -24,8 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
     main.setInverted(false);
     sub.follow(main, true);
 
-    main.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    sub.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    main.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    sub.setIdleMode(CANSparkMax.IdleMode.kCoast);
   }
 
   /**
@@ -63,13 +65,11 @@ public class ShooterSubsystem extends SubsystemBase {
     //   switchGear(gear);
     // }
 
-    setShootSpeed(.75);
+    setShootSpeed(.90);
   }
 
   public void stop() {
     running = false;
-    main.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    sub.setIdleMode(CANSparkMax.IdleMode.kCoast);
     main.set(0);
 
   }
@@ -95,13 +95,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setShootSpeed(double speed) {
     running = true;
-    main.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    sub.setIdleMode(CANSparkMax.IdleMode.kBrake);
     main.set(speed);
+  }
+
+  public double getSpeed()
+  {
+    return main.get();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Speed", main.getOutputCurrent());
   }
 }
