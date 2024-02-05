@@ -31,4 +31,9 @@ public final class Constants {
 
     public static final double SPEAKER_SHOT_SPEED = .5;
   }
+
+  public static class ClimberConstants {
+    public static final int Main_Climber = 99;
+    public static final int Sub_Climber = 99;
+  }
 }

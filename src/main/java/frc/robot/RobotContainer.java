@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +27,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
+  private final Climber climber = new Climber();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -53,8 +55,11 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: on));
+    driverController.b().toggleOnTrue(new InstantCommand(() -> climber.start()));
+    driverController.b().toggleOnFalse(new InstantCommand(() -> climber.stop()));
+
+    //driverController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: on));
+
     driverController.x().onTrue(new InstantCommand(() -> intake.setFakeDistance(-1)));
     driverController.y().onTrue(new InstantCommand(() -> intake.setFakeDistance(1)));
   }
