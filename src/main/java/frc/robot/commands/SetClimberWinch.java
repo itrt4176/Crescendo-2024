@@ -24,28 +24,25 @@ public class SetClimberWinch extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    climber.winchRetract();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = setpoint - climber.getWinchDegrees();
-    double speed = MathUtil.clamp(error * 0.025, -0.7, 0.7);
-
-    if (Math.abs(speed) < 0.2) {
-      return;
-    }
-
-    climber.setWinchSpeed(speed);
+    error = setpoint - climber.getFlipDegrees();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climber.stopWinch();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(error) <= 0.5;
   }
 }
