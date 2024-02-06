@@ -44,7 +44,12 @@ public class Climber extends SubsystemBase {
 
   public double getFlipDegrees() // FIX???
   {
-    return flipper.getRotorPosition().getValueAsDouble() * ClimberConstants.ROTATIONS_TO_ANGLES;
+    return flipper.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
+  }
+
+  public double getWinchDegrees() // FIX???
+  {
+    return winchMain.getEncoder().getPosition() * ClimberConstants.WINCH_ROTATIONS_TO_DEGREES;
   }
 
   public void setWinchSpeed(double speed)
