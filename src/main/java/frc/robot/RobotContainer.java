@@ -43,6 +43,7 @@ public class RobotContainer {
   private final CommandXboxController simController = 
       new CommandXboxController(1);
   
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -73,6 +74,7 @@ public class RobotContainer {
     simController.x().onTrue(new InstantCommand(() -> intake.setFakeDistance(15)));
     simController.y().onTrue(new InstantCommand(() -> intake.setFakeDistance(5)));
 
+    simController.b().toggleOnTrue(sShoot);
 
     driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.a().toggleOnTrue(intakeCommandD);
