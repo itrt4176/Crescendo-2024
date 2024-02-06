@@ -40,6 +40,9 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController simController = 
+      new CommandXboxController(1);
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -63,6 +66,14 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+
+    simController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    simController.a().toggleOnTrue(new StartEndCommand(intake :: on, intake :: on));
+
+    simController.x().onTrue(new InstantCommand(() -> intake.setFakeDistance(15)));
+    simController.y().onTrue(new InstantCommand(() -> intake.setFakeDistance(5)));
+
+
     driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.a().toggleOnTrue(intakeCommandD);
 
