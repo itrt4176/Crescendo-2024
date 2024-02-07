@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.commands.RightShoot;
+import frc.robot.commands.LeftShoot;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +39,9 @@ public class RobotContainer {
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .2);
   private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
+
+  private final RightShoot rShoot = new RightShoot(shooter, intake);
+  private final LeftShoot lShoot = new LeftShoot(shooter, intake);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -73,13 +79,16 @@ public class RobotContainer {
     driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
-
+    driverController.rightBumper().toggleOnTrue(rShoot);
+    driverController.leftBumper().toggleOnTrue(lShoot);
+    
+    /** 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
     driverController.rightBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
 
     driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(-0.3)));
     driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
-    
+    */
   }
 
   /**

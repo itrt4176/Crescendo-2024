@@ -14,9 +14,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  public int gear = 0;
-  public boolean running = false;
-
   CANSparkMax main = new CANSparkMax(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
   CANSparkMax sub = new CANSparkMax(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
 
@@ -24,83 +21,38 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
 
     main.setInverted(false);
-    sub.follow(main, true);
+    //sub.follow(main, true);
+    sub.setInverted(true);
 
     main.setIdleMode(CANSparkMax.IdleMode.kCoast);
     sub.setIdleMode(CANSparkMax.IdleMode.kCoast);
   }
 
-  /**
-   * Increases motor speed and starts the motor if it is not running.
-   */
-  public void shiftUp(){
-    // if(gear < 3 && running){
-    //   gear++;
-    //   start();
-    // }
-    if(gear < 3){
-      gear++;
-      switchGear(gear);
-    }
-  }
-
-  /**
-   * Decreases motor speed and starts the motor
-   */
-  public void shiftDown(){
-    // if(gear > 0 && running){
-    //   gear--;
-    //   start();
-    // }
-    if(gear > 0){
-      gear--;
-      switchGear(gear);
-    }
-  }
-
   public void start(){
-    // if (running == false) {
-    //   gear = 0;
-    //   running = true;
-    //   switchGear(gear);
-    // }
-
     setShootSpeed(.90);
   }
 
   public void stop() {
-    running = false;
-    main.set(0);
-
+    setShootSpeed(0);
   }
-
-  private void switchGear(int gear) {
-    switch(gear){
-      case 0:
-      main.set(.25);
-      break;
-      case 1:
-      main.set(.5);
-      break;
-      case 2:
-      main.set(.75);
-      break;
-      case 3:
-      main.set(1);
-      break;
-    }
-  }
-
-
 
   public void setShootSpeed(double speed) {
-    running = true;
     main.set(speed);
+    sub.set(speed);
   }
 
-  public double getSpeed()
+  public double getMainSpeed()
   {
     return main.get();
+  }
+
+  public double getSubSpeed() {
+    return sub.get();
+  }
+
+  public void setDirectionalShootSpeed(double mainSpeed, double subSpeed) {
+    main.set(mainSpeed);
+    sub.set(subSpeed);
   }
 
   @Override
