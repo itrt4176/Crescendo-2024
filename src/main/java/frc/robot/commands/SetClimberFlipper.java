@@ -13,6 +13,7 @@ public class SetClimberFlipper extends Command {
   private final Climber climber;
   private final double setpoint;
   private double error;
+  private double origin;
 
   public SetClimberFlipper(Climber climber, double setpoint) {
     this.climber = climber;
@@ -23,15 +24,18 @@ public class SetClimberFlipper extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    origin = climber.getFlipDegrees();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = setpoint - climber.getFlipDegrees();
-    double speed = MathUtil.clamp(error * 0.025, -0.7, 0.7);
+    error = setpoint - climber.getFlipDegrees() - origin;
 
-    if (Math.abs(speed) < 0.2) {
+    double speed = MathUtil.clamp(error * 0.025, -0.15, 0.15);
+
+    if (Math.abs(speed) < 0.15) {
       return;
     }
 

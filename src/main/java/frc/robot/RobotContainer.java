@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SetClimberFlipper;
 import frc.robot.commands.SpeakerShoot;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -36,6 +37,7 @@ public class RobotContainer {
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .2);
   private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
+  private final SetClimberFlipper flipper = new SetClimberFlipper(climber, 20);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -68,7 +70,7 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake :: stop));
 
-    driverController.y().toggleOnTrue(sShoot);
+    driverController.y().toggleOnTrue(flipper);
 
     driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
