@@ -48,11 +48,6 @@ public class Climber extends SubsystemBase {
     return flipper.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
   }
 
-  public double getWinchDegrees() // FIX??? check that getPosition returns rotations not pulses
-  {
-    return winchMain.getEncoder().getPosition() * ClimberConstants.WINCH_ROTATIONS_TO_DEGREES;
-  }
-
    //Private method, don't use outside of class because flipper neutral mode has to change :)
   private void setWinchSpeed(double speed)
   {

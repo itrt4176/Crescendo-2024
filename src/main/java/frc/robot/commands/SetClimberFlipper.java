@@ -25,15 +25,15 @@ public class SetClimberFlipper extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    origin = climber.getFlipDegrees();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = setpoint - climber.getFlipDegrees() - origin;
+    error = setpoint - climber.getFlipDegrees();
 
-    double speed = MathUtil.clamp(error * 0.025, -0.15, 0.15);
+    double speed = MathUtil.clamp(error * (.15/ 40), -0.15, 0.15);
 
     if (Math.abs(speed) < 0.15) {
       return;

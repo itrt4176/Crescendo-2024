@@ -36,7 +36,6 @@ public final class Constants {
   public static class ClimberConstants{
     public static final int WINCH_MAIN = 25;
     public static final int WINCH_FOLLOW = 26;
-    public static final double FLIPPER_ROTATIONS_TO_DEGREES = 1 * 360 / (50 * (22 / 16)); //VERIFY!!!
-    public static final double WINCH_ROTATIONS_TO_DEGREES = 1 * 360 / 20; //VERIFY!!!
+    public static final double FLIPPER_ROTATIONS_TO_DEGREES = -1.0 * 360.0 / (50.0 * (22.0 / 16.0)); //VERIFY!!!
   }
 }
