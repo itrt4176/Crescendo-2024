@@ -33,19 +33,21 @@ public class SetClimberFlipper extends Command {
   public void execute() {
     error = setpoint - climber.getFlipDegrees();
 
-    double speed = MathUtil.clamp(error * (.15/ 40), -0.15, 0.15);
+    double speed = MathUtil.clamp(error * (.15/ 20), -0.15, 0.15);
 
-    if (Math.abs(speed) < 0.15) {
+    if (Math.abs(speed) < 0.04) {
       return;
     }
 
-    climber.setFlipSpeed(speed);
+    climber.setFlipSpeed(-speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    
     climber.setFlipSpeed(0);
+
   }
 
   // Returns true when the command should end.

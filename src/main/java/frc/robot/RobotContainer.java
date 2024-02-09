@@ -37,7 +37,7 @@ public class RobotContainer {
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .2);
   private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
-  private final SetClimberFlipper flipper = new SetClimberFlipper(climber, 20);
+  private final SetClimberFlipper flipper = new SetClimberFlipper(climber, 70);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =

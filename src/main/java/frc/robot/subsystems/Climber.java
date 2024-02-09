@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ClimberConstants;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -31,7 +31,7 @@ public class Climber extends SubsystemBase {
     winchFollow.follow(winchMain);
     winchFollow.setInverted(true);
 
-    flipper.setNeutralMode(NeutralModeValue.Coast);
+    flipper.setNeutralMode(NeutralModeValue.Brake);
     winchMain.setIdleMode(IdleMode.kBrake);
     winchFollow.setIdleMode(IdleMode.kBrake);
   }
@@ -75,5 +75,6 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Flipper Degrees", flipper.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES);
   }
 }
