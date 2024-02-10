@@ -4,21 +4,28 @@
 
 package frc.robot;
 
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.SpeakerShoot;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterSubsystem;
+
+import java.io.File;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autos;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SpeakerShoot;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 
 /**
@@ -29,6 +36,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+                                                                         "swerve/neo"));
+
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
   private final Climber climber = new Climber();
@@ -45,7 +55,43 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    XboxController driverXbox = new XboxController(0);
+
+   // AbsoluteDriveAdv closAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+     //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
+     //                                                            null, null, null, null, null, null);
+
+    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                                                OperatorConstants.LEFT_DEADBAND_Y),
+                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                                                OperatorConstants.LEFT_DEADBAND_X),
+                                                                   () -> MathUtil.applyDeadband(driverXbox.getRightX(),
+                                                                                                OperatorConstants.RIGHT_DEADBAND_X),
+                                                                   driverXbox::getYButtonPressed,
+                                                                   driverXbox::getAButtonPressed,
+                                                                   driverXbox::getXButtonPressed,
+                                                                   driverXbox::getBButtonPressed);
+
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+    // right stick controls the angular velocity of the robot
+   /* Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
+        () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
+        () -> driverController.getRawAxis(2));
+
+    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
+        () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
+        () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
+        () -> driverController.getRawAxis(2));
+*/
+     drivebase.setDefaultCommand(closedAbsoluteDriveAdv);
+    //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
   }
+  
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -80,6 +126,17 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(-0.3)));
     driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
     
+    
+  }
+
+  public void setDriveMode()
+  {
+    //drivebase.setDefaultCommand();
+  }
+
+  public void setMotorBrake(boolean brake)
+  {
+    drivebase.setMotorBrake(brake);
   }
 
   /**
