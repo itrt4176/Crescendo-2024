@@ -44,12 +44,12 @@ public class Intake extends SubsystemBase {
 
   public void on()
   {
-    setIntakeSpeed(.3);
+    setIntakeSpeed(-.3);
   }
 
   public void reverse()
   {
-    setIntakeSpeed(-.2);
+    setIntakeSpeed(.2);
   }
 
   public void stop()

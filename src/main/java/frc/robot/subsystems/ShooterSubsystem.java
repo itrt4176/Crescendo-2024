@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,8 +18,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public int gear = 0;
   public boolean running = false;
 
-  CANSparkMax main = new CANSparkMax(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
-  CANSparkMax sub = new CANSparkMax(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
+  CANSparkFlex main = new CANSparkFlex(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
+  CANSparkFlex sub = new CANSparkFlex(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -106,6 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Speed", main.getOutputCurrent());
+    SmartDashboard.putNumber("Shooter Current", main.getOutputCurrent());
+    SmartDashboard.putNumber("Shooter Speed", getSpeed());
   }
 }

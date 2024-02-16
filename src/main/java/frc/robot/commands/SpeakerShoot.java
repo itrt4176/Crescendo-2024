@@ -38,11 +38,12 @@ public class SpeakerShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("execute");
     if(shooter.getSpeed() >= .74)
     {
-      new WaitCommand(1);
-      intake.setIntakeSpeed(.3);
-
+      new WaitCommand(1); // TODO: This does nothing
+      intake.setIntakeSpeed(-.3);
+      System.out.println("up to speed");
     }
   }
 
@@ -57,7 +58,8 @@ public class SpeakerShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    new WaitCommand(.5);
-    return !intake.isNoteLoaded();
+    // new WaitCommand(.5); // TODO: This does nothing
+    // return !intake.isNoteLoaded();
+    return false;
   }
 }
