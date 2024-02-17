@@ -33,9 +33,9 @@ public class SetClimberFlipper extends Command {
   public void execute() {
     error = setpoint - climber.getFlipDegrees();
 
-    double speed = MathUtil.clamp(error * (.4/ 40), -0.4, 0.4);
+    double speed = MathUtil.clamp(error * (.4/ 30.0), -0.4, 0.4);
 
-    if (Math.abs(speed) < 0.05) {
+    if (Math.abs(speed) < 0.1) {
       return;
     }
 
@@ -53,6 +53,6 @@ public class SetClimberFlipper extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(error) <= 0.5;
+    return Math.abs(error) <= 1.0;
   }
 }

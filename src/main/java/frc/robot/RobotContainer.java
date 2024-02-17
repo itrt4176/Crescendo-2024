@@ -37,7 +37,8 @@ public class RobotContainer {
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, .2);
   private final SpeakerShoot sShoot = new SpeakerShoot(shooter, intake);
-  private final SetClimberFlipper flipper = new SetClimberFlipper(climber, 174);
+  private final SetClimberFlipper flipperAmp = new SetClimberFlipper(climber, 189);
+  private final SetClimberFlipper flipperHome = new SetClimberFlipper(climber, 15);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -70,9 +71,10 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake :: stop));
 
-    driverController.y().toggleOnTrue(flipper);
+    driverController.y().onTrue(flipperAmp);
+    driverController.povDown().onTrue(flipperHome);
 
-    driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
