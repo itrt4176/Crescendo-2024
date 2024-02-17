@@ -39,7 +39,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve/neo"));
+                                                                         "neo"));
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
