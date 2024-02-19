@@ -41,7 +41,7 @@ public class SpeakerShoot extends Command {
   @Override
   public void execute() {
     System.out.println("execute");
-    MedianFilter filter = new MedianFilter(10);
+    MedianFilter filter = new MedianFilter(25);
     if (filter.calculate(shooter.getSpeed()) >= .745);
     { 
       intake.setIntakeSpeed(-.3);
