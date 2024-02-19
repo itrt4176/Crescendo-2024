@@ -66,7 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //   switchGear(gear);
     // }
 
-    setShootSpeed(.90);
+    setShootSpeed(.75);
   }
 
   public void stop() {

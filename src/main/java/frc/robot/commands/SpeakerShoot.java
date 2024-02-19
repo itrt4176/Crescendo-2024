@@ -16,13 +16,14 @@ public class SpeakerShoot extends Command {
 
   private final ShooterSubsystem shooter;
   private final Intake intake;
+  private final double speed;
   //add climber later
-  //add intake later
 
   /** Creates a new SpeakerShoot. */
-  public SpeakerShoot(ShooterSubsystem shooter, Intake intake) {
+  public SpeakerShoot(ShooterSubsystem shooter, Intake intake, double speed) {
     this.shooter = shooter;
     this.intake = intake;
+    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -30,7 +31,7 @@ public class SpeakerShoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      shooter.setShootSpeed(ShooterConstants.SPEAKER_SHOT_SPEED);
+      shooter.setShootSpeed(speed);
       
       // intake.setIntakeSpeed(.3);
   }
@@ -39,9 +40,8 @@ public class SpeakerShoot extends Command {
   @Override
   public void execute() {
     System.out.println("execute");
-    if(shooter.getSpeed() >= .74)
-    {
-      new WaitCommand(1); // TODO: This does nothing
+    if (Math.abs(shooter.getSpeed()) >= .74);
+    { 
       intake.setIntakeSpeed(-.3);
       System.out.println("up to speed");
     }

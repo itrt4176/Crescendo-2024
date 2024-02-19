@@ -51,12 +51,18 @@ public class RobotContainer {
 
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.2);
-  private final Command sShoot = new SpeakerShoot(shooter, intake).deadlineWith(
+  private final Command sShoot = new SpeakerShoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED).deadlineWith(
       new WaitUntilCommand(() -> !intake.isNoteLoaded())
         .andThen(new WaitCommand(0.5))
   );
-  private final SetClimberFlipper flipperAmp = new SetClimberFlipper(climber, 189);
-  private final SetClimberFlipper flipperHome = new SetClimberFlipper(climber, 15);
+
+  private final Command aShoot = new SpeakerShoot(shooter, intake, -.3).deadlineWith(
+      new WaitUntilCommand(() -> !intake.isNoteLoaded())
+        .andThen(new WaitCommand(0.5))
+  );
+
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 180);
+  private final SetClimberFlipper flipperToHome = new SetClimberFlipper(climber, 15);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -126,12 +132,14 @@ public class RobotContainer {
     driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
 
-    driverController.y().onTrue(new SequentialCommandGroup(flipperAmp, new SpeakerShoot(shooter, intake)));
-    driverController.povDown().onTrue(flipperHome);
+    driverController.y().onTrue(new SequentialCommandGroup(flipperToAmp, aShoot));
+    // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
+    driverController.povDown().onTrue(flipperToHome);
+    
 
 
     // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
-    driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
+    // driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
