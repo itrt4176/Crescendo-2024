@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -40,7 +41,8 @@ public class SpeakerShoot extends Command {
   @Override
   public void execute() {
     System.out.println("execute");
-    if (Math.abs(shooter.getSpeed()) >= .74);
+    MedianFilter filter = new MedianFilter(10);
+    if (filter.calculate(shooter.getSpeed()) >= .745);
     { 
       intake.setIntakeSpeed(-.3);
       System.out.println("up to speed");
