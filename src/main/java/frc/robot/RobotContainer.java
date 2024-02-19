@@ -17,6 +17,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -71,7 +72,7 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake :: stop));
 
-    driverController.y().onTrue(flipperAmp);
+    driverController.y().onTrue(new SequentialCommandGroup(flipperAmp, new SpeakerShoot(shooter, intake)));
     driverController.povDown().onTrue(flipperHome);
 
     // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
