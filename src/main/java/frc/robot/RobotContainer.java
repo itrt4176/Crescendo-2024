@@ -21,13 +21,16 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.SetClimberFlipper;
 import frc.robot.commands.SpeakerShoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterSubsystem;
+
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 /**
@@ -46,11 +49,14 @@ public class RobotContainer {
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
+
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.2);
   private final Command sShoot = new SpeakerShoot(shooter, intake).deadlineWith(
       new WaitUntilCommand(() -> !intake.isNoteLoaded())
         .andThen(new WaitCommand(0.5))
   );
+  private final SetClimberFlipper flipperAmp = new SetClimberFlipper(climber, 189);
+  private final SetClimberFlipper flipperHome = new SetClimberFlipper(climber, 15);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -119,10 +125,12 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
-    driverController.y().toggleOnTrue(sShoot);
-    // driverController.y().toggleOnTrue(new InstantCommand(() -> shooter.setShootSpeed(Constants.ShooterConstants.SPEAKER_SHOT_SPEED)));
 
-    driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    driverController.y().onTrue(new SequentialCommandGroup(flipperAmp, new SpeakerShoot(shooter, intake)));
+    driverController.povDown().onTrue(flipperHome);
+
+
+    // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
