@@ -4,7 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -22,6 +27,10 @@ public class Climber extends SubsystemBase {
   CANSparkMax winchMain;
   CANSparkMax winchFollow;
 
+  
+
+  
+
   public Climber() {
 
     flipper = new TalonFX(16);
@@ -30,6 +39,19 @@ public class Climber extends SubsystemBase {
 
     winchFollow.follow(winchMain);
     winchFollow.setInverted(true);
+
+    TalonFXConfigurator configurator = flipper.getConfigurator();
+    configurator.apply(new TalonFXConfiguration());//reset configs every time
+
+    HardwareLimitSwitchConfigs limitConfigs = new HardwareLimitSwitchConfigs();//configure limit switch to be able to set flipper to 0 degrees.
+    limitConfigs.withForwardLimitAutosetPositionEnable(true)
+      .withForwardLimitAutosetPositionValue(0.0)
+      .withForwardLimitType(ForwardLimitTypeValue.NormallyOpen)
+      .withForwardLimitSource(ForwardLimitSourceValue.LimitSwitchPin)
+      .withForwardLimitEnable(true);
+
+    configurator.apply(limitConfigs);
+
 
     flipper.setNeutralMode(NeutralModeValue.Brake);
     winchMain.setIdleMode(IdleMode.kBrake);
@@ -42,7 +64,7 @@ public class Climber extends SubsystemBase {
     flipper.set(speed);
   }
 
-  // FIX??? Might not need winch degrees. Also check that getRotorPositions returns rotations not pulses
+  // FIX??? Might not need winch degrees.
   public double getFlipDegrees() 
   {
     return flipper.getPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
@@ -71,6 +93,9 @@ public class Climber extends SubsystemBase {
     setWinchSpeed(0);
     flipper.setNeutralMode(NeutralModeValue.Brake);
   }
+
+
+
 
   @Override
   public void periodic() {
