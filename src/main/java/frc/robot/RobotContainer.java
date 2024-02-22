@@ -8,8 +8,10 @@ package frc.robot;
 import java.io.File;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -23,6 +25,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetClimberFlipper;
 import frc.robot.commands.SpeakerShoot;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -67,28 +70,53 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  
+  private final CommandXboxController testDriveController =
+      new CommandXboxController(1);
+
+  private final AbsoluteDrive tuningDriveCommandForward;
+
+  private final AbsoluteDrive tuningDriveCommand90;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
     XboxController driverXbox = new XboxController(0);
 
    // AbsoluteDriveAdv closAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
      //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
      //                                                            null, null, null, null, null, null);
 
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                                                                                OperatorConstants.LEFT_DEADBAND_Y),
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                                                                                OperatorConstants.LEFT_DEADBAND_X),
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-                                                                                                OperatorConstants.RIGHT_DEADBAND_X),
-                                                                   driverXbox::getYButtonPressed,
-                                                                   driverXbox::getAButtonPressed,
-                                                                   driverXbox::getXButtonPressed,
-                                                                   driverXbox::getBButtonPressed);
+    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(
+      drivebase,
+      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                  OperatorConstants.LEFT_DEADBAND_Y),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                  OperatorConstants.LEFT_DEADBAND_X),
+      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
+                                  OperatorConstants.RIGHT_DEADBAND_X),
+      driverXbox::getYButtonPressed,
+      driverXbox::getAButtonPressed,
+      driverXbox::getXButtonPressed,
+      driverXbox::getBButtonPressed
+    );
+
+    tuningDriveCommandForward = new AbsoluteDrive(
+      drivebase, //swerve
+      () -> 0.5, //vX
+      () -> 0.0, //vY
+      () -> 0.0, //headingHorizontal
+      () -> 0.0 //headingVertical
+    );
+
+    tuningDriveCommand90 = new AbsoluteDrive(
+      drivebase,
+      () -> 0.0,
+      () -> 0.5,
+      () -> 0.0,
+      () -> 0.0
+
+    );
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -107,6 +135,8 @@ public class RobotContainer {
 */
      drivebase.setDefaultCommand(closedAbsoluteDriveAdv);
     //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+  
+    configureBindings();
   }
   
 
@@ -126,17 +156,18 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.a().toggleOnTrue(intakeCommandD);
+    // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // driverController.a().toggleOnTrue(intakeCommandD);
 
-    driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
+    // driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
+    // driverController.y().onTrue(sShoot);
 
-    driverController.y().onTrue(new SequentialCommandGroup(flipperToAmp, aShoot));
-    // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
-    driverController.povDown().onTrue(flipperToHome);
     
 
+    // driverController.y().onTrue(new SequentialCommandGroup(flipperToAmp, aShoot));
+    // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
+    // driverController.povDown().onTrue(flipperToHome);
 
     // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     // driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
@@ -149,6 +180,31 @@ public class RobotContainer {
     driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
     
     
+    // testDriveController.a().onTrue(tuningDriveCommandForward);
+    // testDriveController.y().onTrue(tuningDriveCommand90);
+
+    testDriveController.y().onTrue(new InstantCommand(
+      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(0)),
+      drivebase
+    ));
+
+    testDriveController.b().onTrue(new InstantCommand(
+      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(90)),
+      drivebase
+    ));
+
+    testDriveController.a().onTrue(new InstantCommand(
+      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(180)),
+      drivebase
+    ));
+
+    testDriveController.x().onTrue(new InstantCommand(
+      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(270)),
+      drivebase
+    ));
+
+    SmartDashboard.putData("SysId Drive", drivebase.sysIdDriveMotorCommand());
+    SmartDashboard.putData("SysId Angle", drivebase.sysIdAngleMotorCommand());
   }
 
   public void setDriveMode()
