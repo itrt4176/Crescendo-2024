@@ -26,7 +26,7 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double TURN_CONSTANT    = 6;
+    public static final double TURN_CONSTANT    = 6.0;
 
     public static final double LEFT_DEADBAND_X  = 0.1;
     public static final double LEFT_DEADBAND_Y  = 0.1;
