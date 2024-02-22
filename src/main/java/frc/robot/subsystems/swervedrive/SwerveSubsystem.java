@@ -543,6 +543,8 @@ public class SwerveSubsystem extends SubsystemBase
    * Manually set all swerve modules to angle for PIDF tuning
    * 
    * @param angle {@link Rotation2d} of the desired angle
+   * 
+   * @see <a href="https://github.com/frc1806/Crescendo-1806/blob/ceaecb6cbf6cf326acfbafe528b6a7146d030af7/src/main/java/frc/robot/commands/Swerve/SnapRotateDrive.java">frc1806/Crescendo-1806</a>
    */
   public void setModulesToAngle(Rotation2d angle) {
     driveFieldOriented(getTargetSpeeds(0, 0, angle));
