@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.1"
+    id "com.peterabeles.gversion" version "1.10.2"
 }
 
 java {
@@ -77,6 +78,7 @@ dependencies {
 
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
@@ -123,4 +125,20 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+  srcDir       = "src/main/java/"         // path is relative to the sub-project by default
+                                            // Gradle variables can also be used
+                                            // E.g. "${project.rootDir}/module/src/main/java"
+  classPackage = "frc.robot"
+  className    = "BuildMetadata"            // optional. If not specified GVersion is used
+  dateFormat   = "yyyy-MM-dd h:mm:ss a z"   // optional. This is the default
+  timeZone     = "America/New_York"         // optional. UTC is default
+  debug        = false                      // optional. print out extra debug information
+  language     = "java"                     // optional. Can be Java, Kotlin, YAML, or Properties. Case insensitive.
+  explicitType = false                      // optional. Force types to be explicitly printed
+  indent       = "  "                       // optional. Change how code is indented. 1 tab is default.
+  annotate     = true                       // optional. Java only. Adds @Generated annotation
 }
