@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase {
     winchMain = new CANSparkMax(25, MotorType.kBrushless);
     winchFollow = new CANSparkMax(26, MotorType.kBrushless);
 
-    winchFollow.follow(winchMain);
+    // winchFollow.follow(winchMain);
     winchFollow.setInverted(true);
 
     TalonFXConfigurator configurator = flipper.getConfigurator();

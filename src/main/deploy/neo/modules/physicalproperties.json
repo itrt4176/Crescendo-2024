@@ -2,12 +2,12 @@
   "optimalVoltage": 12,
   "wheelGripCoefficientOfFriction": 1.19,
   "currentLimit": {
-    "drive": 30,
-    "angle": 8
+    "drive": 40,
+    "angle": 20
   },
   "conversionFactor": {
     "angle": 28.125,
-    "drive": 0.062098
+    "drive": 0.0011258758857
   },
   "rampRate": {
     "drive": 0.85,

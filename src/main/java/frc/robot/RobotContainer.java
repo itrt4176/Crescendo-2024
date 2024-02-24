@@ -54,7 +54,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.3);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.4);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
     .andThen(new WaitCommand(0.25))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
@@ -100,13 +100,13 @@ public class RobotContainer {
       driverXbox::getBButtonPressed
     );
 
-    Command closedAbsoluteDriveAdv = drivebase.driveCommand(
+    Command joystickDrive = drivebase.driveCommand(
       () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
                                   OperatorConstants.LEFT_DEADBAND_Y),
       () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
-      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-                                  OperatorConstants.RIGHT_DEADBAND_X)
+      () -> 0.0 //MathUtil.applyDeadband(driverXbox.getRightX(),
+                                  // OperatorConstants.RIGHT_DEADBAND_X)
     );
 
     tuningDriveCommandForward = new AbsoluteDrive(
@@ -141,7 +141,7 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
         () -> driverController.getRawAxis(2));
 */
-     drivebase.setDefaultCommand(closedAbsoluteDriveAdv);
+     drivebase.setDefaultCommand(joystickDrive);
     //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
   
     configureBindings();
@@ -177,8 +177,8 @@ public class RobotContainer {
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
     // driverController.povDown().onTrue(flipperToHome);
 
-    // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
-    // driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
+    driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
