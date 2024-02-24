@@ -25,7 +25,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetClimberFlipper;
-import frc.robot.commands.SpeakerShoot;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Climber;
@@ -54,16 +54,14 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.2);
-  private final Command sShoot = new SpeakerShoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED).deadlineWith(
-      new WaitUntilCommand(() -> !intake.isNoteLoaded())
-        .andThen(new WaitCommand(0.5))
-  );
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.3);
+  private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
+    .andThen(new WaitCommand(0.25))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
-  private final Command aShoot = new SpeakerShoot(shooter, intake, -.3).deadlineWith(
-      new WaitUntilCommand(() -> !intake.isNoteLoaded())
-        .andThen(new WaitCommand(0.5))
-  );
+  private final Command aShoot = new Shoot(shooter, intake, -.3)
+    .andThen(new WaitCommand(0.5))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
   private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 180);
   private final SetClimberFlipper flipperToHome = new SetClimberFlipper(climber, 15);
@@ -171,11 +169,11 @@ public class RobotContainer {
 
     // driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
-    driverController.y().onTrue(sShoot);
+    driverController.y().toggleOnTrue(sShoot);
 
     
 
-    // driverController.y().onTrue(new SequentialCommandGroup(flipperToAmp, aShoot));
+    driverController.b().onTrue( aShoot);
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
     // driverController.povDown().onTrue(flipperToHome);
 
