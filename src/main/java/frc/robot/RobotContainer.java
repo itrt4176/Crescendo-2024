@@ -105,8 +105,8 @@ public class RobotContainer {
                                   OperatorConstants.LEFT_DEADBAND_Y),
       () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
-      () -> 0.0 //MathUtil.applyDeadband(driverXbox.getRightX(),
-                                  // OperatorConstants.RIGHT_DEADBAND_X)
+      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
+                                  OperatorConstants.RIGHT_DEADBAND_X)
     );
 
     tuningDriveCommandForward = new AbsoluteDrive(
