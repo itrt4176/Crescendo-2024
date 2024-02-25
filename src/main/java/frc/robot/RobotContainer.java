@@ -7,6 +7,9 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -86,20 +89,6 @@ public class RobotContainer {
      //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
      //                                                            null, null, null, null, null, null);
 
-    AbsoluteDriveAdv closedAbsoluteDriveAdvOld = new AbsoluteDriveAdv(
-      drivebase,
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-                                  OperatorConstants.LEFT_DEADBAND_Y),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-                                  OperatorConstants.LEFT_DEADBAND_X),
-      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-                                  OperatorConstants.RIGHT_DEADBAND_X),
-      driverXbox::getYButtonPressed,
-      driverXbox::getAButtonPressed,
-      driverXbox::getXButtonPressed,
-      driverXbox::getBButtonPressed
-    );
-
     Command joystickDrive = drivebase.driveCommand(
       () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
                                   OperatorConstants.LEFT_DEADBAND_Y),
@@ -126,6 +115,14 @@ public class RobotContainer {
 
     );
 
+    NamedCommands.registerCommand(
+      "speakerShoot",
+      new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
+        .andThen(new WaitCommand(0.25))
+        .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter)
+      )
+    );
+
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -145,6 +142,8 @@ public class RobotContainer {
     //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
   
     configureBindings();
+
+    SmartDashboard.putData(AutoBuilder.buildAutoChooser());
   }
   
 
@@ -244,6 +243,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return drivebase.getAutonomousCommand("manos-advanced");
   }
 }
