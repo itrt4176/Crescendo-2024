@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.1307047758961377,
-      "y": 4.5116808454054524
+      "x": 1.305971901043328,
+      "y": 5.553919733431884
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "manos-advanced"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "speakerShoot"
+            "pathName": "3-shot"
           }
         }
       ]

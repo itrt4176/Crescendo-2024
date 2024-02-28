@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.1307047758961377,
-      "y": 4.5116808454054524
+      "x": 2,
+      "y": 2
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "manos-advanced"
-          }
-        },
         {
           "type": "named",
           "data": {

@@ -123,6 +123,11 @@ public class RobotContainer {
       )
     );
 
+    NamedCommands.registerCommand(
+      "intake",
+      new IntakeCommand(intake, -.4)
+    );
+
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -243,6 +248,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("distance-calibration");
+    return drivebase.getAutonomousCommand("3Shot");
   }
 }
+
