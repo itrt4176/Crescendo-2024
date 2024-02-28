@@ -25,35 +25,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "test-path"
-                }
-              }
-            ]
+            "pathName": "middle-note"
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "speakerShoot"
-                }
-              }
-            ]
+            "pathName": "upper-note"
           }
         }
       ]
