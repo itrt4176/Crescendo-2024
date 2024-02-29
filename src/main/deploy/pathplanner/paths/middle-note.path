@@ -63,23 +63,6 @@
           ]
         }
       }
-    },
-    {
-      "name": "shoot",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "deadline",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "speakerShoot"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
