@@ -181,8 +181,8 @@ public class RobotContainer {
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
     // driverController.povDown().onTrue(flipperToHome);
 
-    driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
-    driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
+    //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
