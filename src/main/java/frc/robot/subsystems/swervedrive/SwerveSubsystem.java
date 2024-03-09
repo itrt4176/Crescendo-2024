@@ -280,7 +280,7 @@ public class SwerveSubsystem extends SubsystemBase {
       swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
                                           Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
                         Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
-                        true,
+                        false,
                         false);
     });
   }
@@ -331,10 +331,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic()
   {
     
-    // SmartDashboard.putNumber("Front Left Velocity", swerveDrive.getModules()[0].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Front Right Velocity", swerveDrive.getModules()[1].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Back Left Velocity", swerveDrive.getModules()[2].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Back Right Velocity", swerveDrive.getModules()[3].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Front Left Velocity", swerveDrive.getModules()[0].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Front Right Velocity", swerveDrive.getModules()[1].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Back Left Velocity", swerveDrive.getModules()[2].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Back Right Velocity", swerveDrive.getModules()[3].getDriveMotor().getVelocity());
 
     for (SwerveModule module : swerveDrive.getModules()) {
       int moduleId = module.moduleNumber;
