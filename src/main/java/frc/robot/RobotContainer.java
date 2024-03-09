@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HomeFlipper;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetClimberFlipper;
 import frc.robot.commands.Shoot;
@@ -59,12 +60,14 @@ public class RobotContainer {
 
   private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.4);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
-    .andThen(new WaitCommand(0.25))
+    .andThen(new WaitCommand(0.3))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
   private final Command aShoot = new Shoot(shooter, intake, -.3)
     .andThen(new WaitCommand(0.5))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
+
+  private final HomeFlipper home = new HomeFlipper(climber);
 
   private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 180);
   private final SetClimberFlipper flipperToHome = new SetClimberFlipper(climber, 15);
@@ -226,6 +229,8 @@ public class RobotContainer {
       () -> false,
       drivebase
     ));
+
+    driverController.povDown().onTrue(home);
 
     SmartDashboard.putData("SysId Drive", drivebase.sysIdDriveMotorCommand());
     SmartDashboard.putData("SysId Angle", drivebase.sysIdAngleMotorCommand());

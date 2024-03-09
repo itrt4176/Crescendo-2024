@@ -18,6 +18,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ClimberConstants;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,14 +34,18 @@ public class Climber extends SubsystemBase {
   private TalonFX flipperMain;
   private TalonFX flipperFollow;
 
-  private DigitalInput forwardLimitSwitch;
+  // private DigitalInput forwardLimitSwitch;
   private DigitalInput reverseLimitSwitch;
+
+  private AnalogInput homeSensor;
 
   public Climber() {
 
     flipperMain = new TalonFX(20);
     flipperFollow = new TalonFX(21);
     flipperFollow.setControl(new StrictFollower(flipperMain.getDeviceID()));
+    homeSensor = new AnalogInput(2);
+
 
     // winchFollow.follow(winchMain);
     flipperFollow.setInverted(true);
@@ -51,13 +57,13 @@ public class Climber extends SubsystemBase {
     flipperMain.setNeutralMode(NeutralModeValue.Brake);
     flipperFollow.setNeutralMode(NeutralModeValue.Brake);
 
-    forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
+    // forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
     reverseLimitSwitch = new DigitalInput(REVERSE_LIMIT_DIO);
   }
 
-  public Trigger getForwardLimitSwitch() {
-    return new Trigger(() -> !forwardLimitSwitch.get());
-  }
+  // public Trigger getForwardLimitSwitch() {
+  //   return new Trigger(() -> !forwardLimitSwitch.get());
+  // }
 
   public Trigger getReverseLimitSwitch() {
     return new Trigger(() -> !reverseLimitSwitch.get());
@@ -67,7 +73,7 @@ public class Climber extends SubsystemBase {
   {
     flipperMain.setControl(
       flipperOutput.withOutput(speed)
-        .withLimitForwardMotion(!forwardLimitSwitch.get())
+        // .withLimitForwardMotion(!forwardLimitSwitch.get())
         .withLimitReverseMotion(!reverseLimitSwitch.get())
     );
   }
@@ -78,14 +84,36 @@ public class Climber extends SubsystemBase {
     return flipperMain.getPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
   }
 
+  public boolean isHomed()
+  {
+    if(getDistance() < 25.0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public void setZero()
+  {
+     flipperMain.setPosition(0);
+     flipperFollow.setPosition(0);
+  }
+
    //Private method, don't use outside of class because flipper neutral mode has to change :)
 
 
+   public double getDistance()
+  {
+    return (Math.pow(homeSensor.getAverageVoltage(), -1.2045)) * 27.726;
+  }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flipper Degrees", flipperMain.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES);
+    SmartDashboard.putNumber("Sensor Reading", getDistance());
+
   }
 }
+
