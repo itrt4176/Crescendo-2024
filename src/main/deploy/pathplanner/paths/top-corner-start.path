@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.5136030322185964,
+        "y": 7.015965109624455
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.8736598926831942,
+        "y": 7.612630764108646
+      },
+      "isLocked": false,
+      "linkedName": "corner-start"
+    },
+    {
+      "anchor": {
+        "x": 0.8427978760719429,
+        "y": 6.635333571419023
+      },
+      "prevControl": {
+        "x": 1.3571648195927977,
+        "y": 7.45832068105239
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "corner-shoot1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -119.51999999999998,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.51999999999998,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -179.87951487940035,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

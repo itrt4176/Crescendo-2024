@@ -5,7 +5,7 @@
       "x": 0.8119358594606917,
       "y": 7.159987853810294
     },
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -16,15 +16,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "speakerShoot"
+                  "pathName": "top-corner-start"
+                }
+              },
+              {
+                "type": "deadline",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "speakerShoot"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "top-corner"
+                  "pathName": "top-corner-intake"
                 }
               },
               {
