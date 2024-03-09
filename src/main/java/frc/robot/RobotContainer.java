@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -58,7 +59,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.4);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.35);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
     .andThen(new WaitCommand(0.3))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
@@ -87,6 +88,8 @@ public class RobotContainer {
 
   private final AbsoluteDrive tuningDriveCommand90;
 
+  private final SendableChooser<Command> autoChooser;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -101,7 +104,7 @@ public class RobotContainer {
                                   OperatorConstants.LEFT_DEADBAND_Y),
       () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
-      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
+      () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
                                   OperatorConstants.RIGHT_DEADBAND_X)
     );
 
@@ -132,7 +135,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
       "intake",
-      new IntakeCommand(intake, -.4)
+      new IntakeCommand(intake, -.35)
     );
 
     // Applies deadbands and inverts controls because joysticks
@@ -155,7 +158,9 @@ public class RobotContainer {
   
     configureBindings();
 
-    SmartDashboard.putData(AutoBuilder.buildAutoChooser());
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto", autoChooser);
   }
   
 
@@ -256,10 +261,10 @@ public class RobotContainer {
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
-   */
+   */ 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("middle-note");
+    return autoChooser.getSelected();
   }
 }
 
