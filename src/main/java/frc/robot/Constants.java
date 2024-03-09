@@ -73,6 +73,6 @@ public final class Constants {
   public static class ClimberConstants{
     public static final int FORWARD_LIMIT_DIO = 0;
     public static final int REVERSE_LIMIT_DIO = 1;
-    public static final double FLIPPER_ROTATIONS_TO_DEGREES = -1.0 * 360.0 / (50.0 * (22.0 / 16.0)); //VERIFY!!!
+    public static final double FLIPPER_ROTATIONS_TO_DEGREES = -1.0 * 360.0 / (100.0 * (22.0 / 16.0)); //VERIFY!!!
   }
 }

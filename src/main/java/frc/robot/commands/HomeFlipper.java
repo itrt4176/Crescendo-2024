@@ -19,7 +19,7 @@ public class HomeFlipper extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climber.setFlipSpeed(.20);
+    climber.setFlipSpeed(.40);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

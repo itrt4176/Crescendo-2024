@@ -73,7 +73,7 @@ public class Climber extends SubsystemBase {
   {
     flipperMain.setControl(
       flipperOutput.withOutput(speed)
-        // .withLimitForwardMotion(!forwardLimitSwitch.get())
+        .withLimitForwardMotion(isHomed())
         .withLimitReverseMotion(!reverseLimitSwitch.get())
     );
   }

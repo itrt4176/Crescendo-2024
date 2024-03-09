@@ -69,8 +69,12 @@ public class RobotContainer {
 
   private final HomeFlipper home = new HomeFlipper(climber);
 
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 180);
-  private final SetClimberFlipper flipperToHome = new SetClimberFlipper(climber, 15);
+  
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 153);
+
+  private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
+
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -182,7 +186,9 @@ public class RobotContainer {
 
     driverController.b().onTrue( aShoot);
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
-    // driverController.povDown().onTrue(flipperToHome);
+
+    driverController.povUp().onTrue(ampRoutine);
+    driverController.povDown().onTrue(home);
 
     //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
@@ -230,7 +236,7 @@ public class RobotContainer {
       drivebase
     ));
 
-    driverController.povDown().onTrue(home);
+    
 
     SmartDashboard.putData("SysId Drive", drivebase.sysIdDriveMotorCommand());
     SmartDashboard.putData("SysId Angle", drivebase.sysIdAngleMotorCommand());
@@ -253,7 +259,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("3Shot");
+    return drivebase.getAutonomousCommand("middle-note");
   }
 }
 
