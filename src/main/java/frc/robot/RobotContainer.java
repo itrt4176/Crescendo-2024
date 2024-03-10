@@ -72,7 +72,7 @@ public class RobotContainer {
   private final HomeFlipper home = new HomeFlipper(climber);
 
   
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 153);
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
 
   private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
 
