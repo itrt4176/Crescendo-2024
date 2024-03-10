@@ -35,9 +35,10 @@ public class Climber extends SubsystemBase {
   private TalonFX flipperFollow;
 
   // private DigitalInput forwardLimitSwitch;
-  private DigitalInput reverseLimitSwitch;
+  // private DigitalInput reverseLimitSwitch;
 
   private AnalogInput homeSensor;
+  private AnalogInput reverseSensor;
 
   public Climber() {
 
@@ -45,6 +46,7 @@ public class Climber extends SubsystemBase {
     flipperFollow = new TalonFX(21);
     flipperFollow.setControl(new StrictFollower(flipperMain.getDeviceID()));
     homeSensor = new AnalogInput(2);
+    reverseSensor = new AnalogInput(1);
 
 
     // winchFollow.follow(winchMain);
@@ -56,25 +58,14 @@ public class Climber extends SubsystemBase {
     flipperOutput = new DutyCycleOut(0.0);
     flipperMain.setNeutralMode(NeutralModeValue.Brake);
     flipperFollow.setNeutralMode(NeutralModeValue.Brake);
-
-    // forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
-    reverseLimitSwitch = new DigitalInput(REVERSE_LIMIT_DIO);
-  }
-
-  // public Trigger getForwardLimitSwitch() {
-  //   return new Trigger(() -> !forwardLimitSwitch.get());
-  // }
-
-  public Trigger getReverseLimitSwitch() {
-    return new Trigger(() -> !reverseLimitSwitch.get());
   }
 
   public void setFlipSpeed(double speed)
   {
     flipperMain.setControl(
       flipperOutput.withOutput(speed)
-        .withLimitForwardMotion(isHomed())
-        .withLimitReverseMotion(!reverseLimitSwitch.get())
+        // .withLimitForwardMotion(isHomed())
+        // .withLimitReverseMotion(isFullyExtended())
     );
   }
 
@@ -86,12 +77,20 @@ public class Climber extends SubsystemBase {
 
   public boolean isHomed()
   {
-    if(getDistance() < 25.0)
+    if(getHomeDistance() < 25.0)
     {
       return true;
     }
     return false;
   }
+
+public boolean isFullyExtended() {
+  if(getReverseDistance() < 25.0) {
+    return true;
+  }
+  return false;
+}
+
 
   public void setZero()
   {
@@ -102,17 +101,27 @@ public class Climber extends SubsystemBase {
    //Private method, don't use outside of class because flipper neutral mode has to change :)
 
 
-   public double getDistance()
+   public double getHomeDistance()
   {
     return (Math.pow(homeSensor.getAverageVoltage(), -1.2045)) * 27.726;
+  }
+
+  public double getReverseDistance() {
+    return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
 
   @Override
   public void periodic() {
+  //Constantly checks the limit switches
+  flipperMain.setControl(
+    flipperOutput.withLimitForwardMotion(isHomed())
+      .withLimitReverseMotion(isFullyExtended())
+  );
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flipper Degrees", flipperMain.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES);
-    SmartDashboard.putNumber("Sensor Reading", getDistance());
+    SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
+    SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
 
   }
 }
