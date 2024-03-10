@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3740584827141216,
+        "x": 1.35,
         "y": 5.553919733431884
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2006814918498636,
+        "x": 1.1766230091357421,
         "y": 5.553919733431884
       },
       "isLocked": false,
@@ -20,11 +20,11 @@
         "y": 5.553919733431884
       },
       "prevControl": {
-        "x": 2.5837353453331486,
+        "x": 2.3414165885203806,
         "y": 5.553919733431884
       },
       "nextControl": {
-        "x": 3.445835896415992,
+        "x": 3.4414165885203802,
         "y": 5.553919733431884
       },
       "isLocked": false,
@@ -32,11 +32,11 @@
     },
     {
       "anchor": {
-        "x": 1.1697987377017405,
+        "x": 1.35,
         "y": 5.553919733431884
       },
       "prevControl": {
-        "x": 2.113284226568455,
+        "x": 2.2934854888667147,
         "y": 5.553919733431884
       },
       "nextControl": null,
@@ -45,7 +45,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Don't ram the goal!",
+      "minWaypointRelativePos": 1.85,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 540.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intake",

@@ -3,39 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5136030322185964,
-        "y": 7.015965109624455
+        "x": 2.6,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8736598926831942,
-        "y": 7.612630764108646
+        "x": 2.3764054594347233,
+        "y": 4.36646959700312
       },
       "isLocked": false,
-      "linkedName": "corner-start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7115782853050124,
-        "y": 6.710919128450098
+        "x": 1.35,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.2259452288258672,
-        "y": 7.533906238083465
+        "x": 1.9007593111379446,
+        "y": 4.893630612296643
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "corner-shoot1"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [
     {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 60.0,
-      "rotateFast": false
+      "name": "Don't ram the speaker!",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 540.0
+      }
     }
   ],
-  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
@@ -45,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
