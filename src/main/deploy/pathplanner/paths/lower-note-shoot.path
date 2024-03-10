@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6,
-        "y": 4.1
+        "x": 2.601932822913265,
+        "y": 4.0840735315555845
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3764054594347233,
-        "y": 4.36646959700312
+        "x": 2.4024134827263524,
+        "y": 4.369016679550025
       },
       "isLocked": false,
       "linkedName": "lower-note"
@@ -20,47 +20,35 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.9007593111379446,
-        "y": 4.893630612296643
+        "x": 1.8414571441781704,
+        "y": 4.848126459142773
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "speaker"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [
     {
       "name": "Don't ram the speaker!",
       "minWaypointRelativePos": 0.95,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.75,
+        "maxVelocity": 1.0,
         "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 540.0
       }
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "intake",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 3.0,

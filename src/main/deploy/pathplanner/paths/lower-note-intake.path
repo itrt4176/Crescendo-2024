@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.35,
-        "y": 4.282508307059678
+        "x": 1.7172216800573958,
+        "y": 4.742463219262278
       },
       "isLocked": false,
       "linkedName": "speaker"
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 4.1
+        "x": 2.601932822913265,
+        "y": 4.0840735315555845
       },
       "prevControl": {
-        "x": 1.840246943774945,
-        "y": 4.1
+        "x": 1.974405151817823,
+        "y": 4.0840735315555845
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.75,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -41,32 +41,14 @@
       "minWaypointRelativePos": 0.95,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.75,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 0.65,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 540.0
       }
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
