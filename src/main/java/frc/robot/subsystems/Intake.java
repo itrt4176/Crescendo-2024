@@ -66,7 +66,7 @@ public class Intake extends SubsystemBase {
 
   public boolean isNoteLoaded()
   {
-    if(getDistance() < 13)//placeholder condition that needs to be tested
+    if(getDistance() < 25)//placeholder condition that needs to be tested
     {
       return true;
     }

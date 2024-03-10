@@ -55,7 +55,7 @@ public class Shoot extends Command {
   public void end(boolean interrupted) {
     
     // shooter.setShootSpeed(0);
-    intake.setIntakeSpeed(0);
+    // intake.setIntakeSpeed(0);
   }
 
   // Returns true when the command should end.
