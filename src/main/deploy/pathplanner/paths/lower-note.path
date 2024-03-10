@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.0470430609107666,
-        "y": 3.8906618097596377
+        "x": 2.599616952788408,
+        "y": 4.075468245723221
       },
       "prevControl": {
-        "x": 2.453717134922422,
-        "y": 3.919841773332836
+        "x": 2.006291026800063,
+        "y": 4.1046482092964185
       },
       "nextControl": {
-        "x": 3.060782022445328,
-        "y": 3.88998612312679
+        "x": 2.613355914322969,
+        "y": 4.0747925590903735
       },
       "isLocked": false,
       "linkedName": null
@@ -49,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -73,13 +73,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.56754581518788,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -178.61012770104702,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
