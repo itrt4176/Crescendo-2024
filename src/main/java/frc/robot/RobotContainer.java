@@ -9,7 +9,6 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,7 +68,8 @@ public class RobotContainer {
     .andThen(new WaitCommand(0.5))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
-  private final HomeFlipper home = new HomeFlipper(climber);
+  private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
+  private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
 
   
   private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
@@ -195,7 +195,7 @@ public class RobotContainer {
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
 
     driverController.povUp().onTrue(ampRoutine);
-    driverController.povDown().onTrue(home);
+    driverController.povDown().onTrue(homeReset);
 
     //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
@@ -266,7 +266,6 @@ public class RobotContainer {
    */ 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // var auto = (PathPlannerAuto) autoChooser.getSelected(); // Ignore this for now
 
     return autoChooser.getSelected();
   }
