@@ -27,13 +27,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle-note-intake"
+            "pathName": "upper-note-intake"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "speakerShoot"
+            "pathName": "upper-note-shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "speakerShoot"
+                }
+              }
+            ]
           }
         }
       ]

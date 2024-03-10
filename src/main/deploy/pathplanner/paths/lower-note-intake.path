@@ -12,7 +12,7 @@
         "y": 4.282508307059678
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "speaker"
     },
     {
       "anchor": {
@@ -25,14 +25,14 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "lower-note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Don't ram the stage!",
-      "minWaypointRelativePos": 0.85,
+      "minWaypointRelativePos": 0.95,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.75,
@@ -42,25 +42,7 @@
       }
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "intake",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 3.0,

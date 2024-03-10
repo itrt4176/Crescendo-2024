@@ -12,22 +12,28 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "speakerShoot"
-                }
-              }
-            ]
+            "name": "speakerShoot"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "upper-note-intake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "upper-note-intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -37,13 +43,25 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "middle-note-intake"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "speakerShoot"
+                  "name": "intake"
                 }
               }
             ]
@@ -52,26 +70,32 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle-note"
+            "pathName": "middle-note-shoot"
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "lower-note-intake"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "speakerShoot"
+                  "name": "intake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "lower-note-intake"
           }
         },
         {

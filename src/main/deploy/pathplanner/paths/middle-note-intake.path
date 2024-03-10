@@ -4,52 +4,36 @@
     {
       "anchor": {
         "x": 1.35,
-        "y": 5.553919733431884
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.1766230091357421,
-        "y": 5.553919733431884
+        "y": 5.55
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "speaker"
     },
     {
       "anchor": {
-        "x": 2.8914165885203804,
+        "x": 2.9,
         "y": 5.553919733431884
       },
       "prevControl": {
-        "x": 2.3414165885203806,
-        "y": 5.553919733431884
-      },
-      "nextControl": {
-        "x": 3.4414165885203802,
-        "y": 5.553919733431884
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.35,
-        "y": 5.553919733431884
-      },
-      "prevControl": {
-        "x": 2.2934854888667147,
+        "x": 1.9565145111332853,
         "y": 5.553919733431884
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "middle-note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Don't ram the goal!",
-      "minWaypointRelativePos": 1.85,
-      "maxWaypointRelativePos": 2.0,
+      "name": "Slow note",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.75,
         "maxAcceleration": 2.0,
@@ -58,25 +42,7 @@
       }
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
