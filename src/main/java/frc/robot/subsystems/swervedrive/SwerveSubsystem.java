@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.PPLibTelemetry;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -25,12 +26,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.DrivebaseConstants.AngularConstants;
 import frc.robot.Constants.DrivebaseConstants.DriveConstants;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.function.DoubleSupplier;
 // import org.photonvision.PhotonCamera;
 // import org.photonvision.targeting.PhotonPipelineResult;
@@ -80,15 +83,16 @@ public class SwerveSubsystem extends SubsystemBase {
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
-    } catch (Exception e) {
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     zeroGyro();
+    // swerveDrive.getGyro().setOffset(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
     setupPathPlanner();
   }
 
@@ -164,7 +168,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command getAutonomousCommand(String pathName)
   {
     // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return new PathPlannerAuto(pathName);
+    Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(pathName);
+    return new InstantCommand(() -> { resetOdometry(startingPose); }).andThen(new PathPlannerAuto(pathName));
     // var path = PathPlannerPath.fromPathFile(pathName);
     // resetOdometry(path.getPreviewStartingHolonomicPose());
     // PPLibTelemetry.setCurrentPath(path);

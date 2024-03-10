@@ -9,6 +9,7 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -99,10 +100,11 @@ public class RobotContainer {
      //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
      //                                                            null, null, null, null, null, null);
 
+    // FIELD ORIENTED REQUIRES BOTH CONTROLLER X-AXES TO BE INVERTED!
     Command joystickDrive = drivebase.driveCommand(
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
                                   OperatorConstants.LEFT_DEADBAND_Y),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
       () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
                                   OperatorConstants.RIGHT_DEADBAND_X)
@@ -264,6 +266,8 @@ public class RobotContainer {
    */ 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+    // var auto = (PathPlannerAuto) autoChooser.getSelected(); // Ignore this for now
+
     return autoChooser.getSelected();
   }
 }
