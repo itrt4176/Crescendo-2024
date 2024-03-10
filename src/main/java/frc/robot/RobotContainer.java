@@ -9,6 +9,7 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -59,7 +60,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.35);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.3);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
     .andThen(new WaitCommand(0.3))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
@@ -68,11 +69,10 @@ public class RobotContainer {
     .andThen(new WaitCommand(0.5))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
-  private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
-  private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
+  private final HomeFlipper home = new HomeFlipper(climber);
 
   
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 160);
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
 
   private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
 
@@ -100,10 +100,11 @@ public class RobotContainer {
      //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
      //                                                            null, null, null, null, null, null);
 
+    // FIELD ORIENTED REQUIRES BOTH CONTROLLER X-AXES TO BE INVERTED!
     Command joystickDrive = drivebase.driveCommand(
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
                                   OperatorConstants.LEFT_DEADBAND_Y),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
       () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
                                   OperatorConstants.RIGHT_DEADBAND_X)
@@ -136,7 +137,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
       "intake",
-      new IntakeCommand(intake, -.35)
+      new IntakeCommand(intake, -.3)
     );
 
     // Applies deadbands and inverts controls because joysticks
@@ -194,7 +195,7 @@ public class RobotContainer {
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
 
     driverController.povUp().onTrue(ampRoutine);
-    driverController.povDown().onTrue(homeReset);
+    driverController.povDown().onTrue(home);
 
     //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
@@ -265,6 +266,8 @@ public class RobotContainer {
    */ 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+    // var auto = (PathPlannerAuto) autoChooser.getSelected(); // Ignore this for now
+
     return autoChooser.getSelected();
   }
 }
