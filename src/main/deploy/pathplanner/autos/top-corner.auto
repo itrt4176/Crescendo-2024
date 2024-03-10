@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.51,
-      "y": 7.02
+      "x": 0.7115782853050124,
+      "y": 6.710919128450098
     },
-    "rotation": 0.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -15,12 +15,6 @@
           "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "top-corner-start"
-                }
-              },
               {
                 "type": "deadline",
                 "data": {
@@ -38,6 +32,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "top-corner-intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "top-corner-shot"
                 }
               },
               {

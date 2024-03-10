@@ -60,7 +60,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.35);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.3);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
     .andThen(new WaitCommand(0.3))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
@@ -137,7 +137,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
       "intake",
-      new IntakeCommand(intake, -.35)
+      new IntakeCommand(intake, -.3)
     );
 
     // Applies deadbands and inverts controls because joysticks
