@@ -59,6 +59,8 @@ public final class Constants {
     public static final int INTAKE_MAIN = 14; //placeholder
     public static final int INTAKE_FOLLOW = 15;//placeholder
     public static final int SHARP = 0; // placeholder
+
+    public static final double INTAKE_SPEED = -.22;
     
   }
 
@@ -67,6 +69,7 @@ public final class Constants {
     public static final int SUB_SHOOTER = 18;
 
     public static final double SPEAKER_SHOT_SPEED = -.65;
+    public static final double AMP_SHOT_SPEED = -.3;
   }
 
 

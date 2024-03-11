@@ -59,13 +59,14 @@ public class RobotContainer {
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.3);
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, Constants.IntakeConstants.INTAKE_SPEED);
   private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
     .andThen(new WaitCommand(0.3))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
     .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
 
-  private final Command aShoot = new Shoot(shooter, intake, -.3)
+
+  private final Command aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
     .andThen(new WaitCommand(0.5))
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
 
@@ -104,7 +105,8 @@ public class RobotContainer {
     // FIELD ORIENTED REQUIRES BOTH CONTROLLER X-AXES TO BE INVERTED!
     Command joystickDrive = drivebase.driveCommand(
       () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-                                  OperatorConstants.LEFT_DEADBAND_Y),
+                                  
+      OperatorConstants.LEFT_DEADBAND_Y),
       () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
       () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
@@ -131,14 +133,14 @@ public class RobotContainer {
     NamedCommands.registerCommand(
       "speakerShoot",
       new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
-        .andThen(new WaitCommand(0.3))
-        .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
-        .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter))
+        .andThen(new WaitCommand(0.25))
+        .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter)
+      )
     );
 
     NamedCommands.registerCommand(
       "intake",
-      new IntakeCommand(intake, -.3)
+      new IntakeCommand(intake, -.23)
     );
 
     // Applies deadbands and inverts controls because joysticks
