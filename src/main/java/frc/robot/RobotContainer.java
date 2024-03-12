@@ -68,7 +68,8 @@ public class RobotContainer {
 
   private final Command aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
     .andThen(new WaitCommand(0.5))
-    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter));
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
 
   private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
   private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
