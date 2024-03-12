@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.601932822913265,
-        "y": 4.0840735315555845
+        "x": 2.6,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4024134827263524,
-        "y": 4.369016679550025
+        "x": 2.103557572044054,
+        "y": 4.221368063589208
       },
       "isLocked": false,
-      "linkedName": "lower-note"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,28 +20,22 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.8414571441781704,
-        "y": 4.848126459142773
+        "x": 1.811757936312081,
+        "y": 5.04813369816313
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "speaker"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.9,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Don't ram the speaker!",
-      "minWaypointRelativePos": 0.95,
+      "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.75,
         "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 540.0

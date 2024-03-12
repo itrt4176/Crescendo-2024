@@ -3,34 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0854377498228684,
-        "y": 7.170275192680712
+        "x": 2.9,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.275252029588272,
-        "y": 6.490448653646762
+        "x": 2.113284226568453,
+        "y": 6.293145477286215
       },
       "isLocked": false,
-      "linkedName": "upper-note"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 1.35,
-        "y": 5.55
+        "y": 5.553919733431884
       },
       "prevControl": {
         "x": 1.7464906815425314,
-        "y": 5.946490681542531
+        "y": 5.950410414974415
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "speaker"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.2,
+      "rotationDegrees": 40.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 0.0,
       "rotateFast": false
     }
@@ -38,7 +43,7 @@
   "constraintZones": [
     {
       "name": "Don't ram the goal!",
-      "minWaypointRelativePos": 0.95,
+      "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.75,
