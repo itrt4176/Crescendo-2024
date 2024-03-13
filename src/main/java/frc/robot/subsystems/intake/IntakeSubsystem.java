@@ -4,16 +4,10 @@
 
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.StrictFollower;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -41,10 +35,12 @@ public class IntakeSubsystem extends SubsystemBase {
     setIntakeSpeed(0);
   }
 
+  @AutoLogOutput(key = "IntakeSubsystem/SharpDistance")
   public double getDistance() {
     return (Math.pow(inputs.sharpSensorAverageVoltage, -1.2045)) * 27.726;
   }
 
+  @AutoLogOutput
   public boolean isNoteLoaded() {
     if (getDistance() < 30.0)// placeholder condition that needs to be tested
     {
