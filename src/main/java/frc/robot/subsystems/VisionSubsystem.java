@@ -93,9 +93,13 @@ public class VisionSubsystem extends SubsystemBase {
     limelight.setDriverMode(true);
   }
 
-  public Optional<EstimatedRobotPose> getVisionEstimatedPose(Pose2d currentPoseEstimate) {
-    poseEstimator.setReferencePose(currentPoseEstimate);
-    return poseEstimator.update();
+  public Optional<EstimatedRobotPose> getLimelightEstimatedPose(Pose2d currentPoseEstimate) {
+    if (enabled) {
+      poseEstimator.setReferencePose(currentPoseEstimate);
+      return poseEstimator.update();
+    }
+
+    return Optional.empty();
   }
 
   @Override

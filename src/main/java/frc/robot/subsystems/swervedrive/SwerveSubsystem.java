@@ -29,12 +29,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.DrivebaseConstants.AngularConstants;
 import frc.robot.Constants.DrivebaseConstants.DriveConstants;
+import frc.robot.utils.VisionPoseCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+
+import org.photonvision.EstimatedRobotPose;
+
 // import org.photonvision.PhotonCamera;
 // import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
@@ -59,6 +68,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
   public double maximumSpeed = Units.feetToMeters(14.5);
+
+  private Set<VisionPoseCallback> visionCallbacks;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -94,6 +105,8 @@ public class SwerveSubsystem extends SubsystemBase {
     zeroGyro();
     // swerveDrive.getGyro().setOffset(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
     setupPathPlanner();
+
+    visionCallbacks = new HashSet<>(VisionConstants.NUM_CAMERAS);
   }
 
   /**
@@ -336,6 +349,13 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic()
   {
+    for (VisionPoseCallback callback : visionCallbacks) {
+      callback.apply(getPose()).ifPresent(visionEstimate -> {
+        var visionPose = visionEstimate.estimatedPose.toPose2d();
+        var timestamp = visionEstimate.timestampSeconds;
+        swerveDrive.addVisionMeasurement(visionPose, timestamp);
+      });
+    }
     
     SmartDashboard.putNumber("Front Left Velocity", swerveDrive.getModules()[0].getDriveMotor().getVelocity());
     SmartDashboard.putNumber("Front Right Velocity", swerveDrive.getModules()[1].getDriveMotor().getVelocity());
@@ -405,6 +425,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public Pose2d getPose()
   {
     return swerveDrive.getPose();
+  }
+
+  public void registerVisionPoseCallback(VisionPoseCallback callback) {
+    visionCallbacks.add(callback);
   }
 
   /**

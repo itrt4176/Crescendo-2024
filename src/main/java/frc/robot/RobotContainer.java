@@ -37,7 +37,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterSubsystem;
-
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -52,6 +52,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "neo"));
+
+  private final VisionSubsystem vision = VisionSubsystem.getInstance();
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
@@ -158,7 +160,8 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
         () -> driverController.getRawAxis(2));
 */
-     drivebase.setDefaultCommand(joystickDrive);
+   drivebase.setDefaultCommand(joystickDrive);
+   drivebase.registerVisionPoseCallback(vision::getLimelightEstimatedPose);
     //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
   
     configureBindings();
