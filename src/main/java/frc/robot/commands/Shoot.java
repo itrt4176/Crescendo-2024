@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.*;
@@ -17,12 +17,12 @@ import frc.robot.Constants.ShooterConstants.*;
 public class Shoot extends Command {
 
   private final ShooterSubsystem shooter;
-  private final Intake intake;
+  private final IntakeSubsystem intake;
   private final double speed;
   //add climber later
 
   /** Creates a new SpeakerShoot. */
-  public Shoot(ShooterSubsystem shooter, Intake intake, double speed) {
+  public Shoot(ShooterSubsystem shooter, IntakeSubsystem intake, double speed) {
     this.shooter = shooter;
     this.intake = intake;
     this.speed = speed;

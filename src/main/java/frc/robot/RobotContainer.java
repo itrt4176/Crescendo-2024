@@ -33,7 +33,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -53,7 +53,7 @@ public class RobotContainer {
 
   private final VisionSubsystem vision = VisionSubsystem.getInstance();
 
-  private final Intake intake = new Intake();
+  private final IntakeSubsystem intake = new IntakeSubsystem();
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
