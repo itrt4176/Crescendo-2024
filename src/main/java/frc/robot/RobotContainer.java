@@ -77,7 +77,7 @@ public class RobotContainer {
   
   private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
 
-  private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
+  private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(aShoot, home);
 
   
 
@@ -188,16 +188,18 @@ public class RobotContainer {
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.a().toggleOnTrue(intakeCommandD);
 
-    // driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
+    driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
     driverController.y().toggleOnTrue(sShoot);
 
     
 
-    driverController.b().onTrue( aShoot);
-    // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
+    // driverController.b().toggleOnTrue(new StartEndCommand(intake :: lookIntake, intake :: lookClimber));
 
-    driverController.povUp().onTrue(ampRoutine);
+    driverController.b().onTrue(ampRoutine);
+
+    driverController.povUp().onTrue(flipperToAmp);
+
     driverController.povDown().onTrue(homeReset);
 
     //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
