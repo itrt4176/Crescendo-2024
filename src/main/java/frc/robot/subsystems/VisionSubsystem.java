@@ -58,7 +58,7 @@ public class VisionSubsystem extends SubsystemBase {
   /** Creates a new VisionSubsystem. */
   private VisionSubsystem() {
     limelight = new PhotonCamera(LIMELIGHT_NAME);
-    limelight.setDriverMode(false);
+    limelight.setDriverMode(!enabled);
     limelight.setLED(VisionLEDMode.kOff);
 
     poseEstimator = new PhotonPoseEstimator(
