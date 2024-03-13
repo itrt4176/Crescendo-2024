@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -13,29 +17,16 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
-  /** Creates a new Intake. */
+  private final IntakeIO io;
+  private final IntakeInputsAutoLogged inputs = new IntakeInputsAutoLogged();
 
-  private TalonFX mainFx;
-  private TalonFX followFx;
-  private AnalogInput sharp;
-
-  public IntakeSubsystem() {
-    mainFx = new TalonFX(Constants.IntakeConstants.INTAKE_MAIN);
-    followFx = new TalonFX(Constants.IntakeConstants.INTAKE_FOLLOW);
-    sharp = new AnalogInput(Constants.IntakeConstants.SHARP);
-
-    mainFx.setNeutralMode(NeutralModeValue.Brake);
-    followFx.setNeutralMode(NeutralModeValue.Brake);
-
-    mainFx.setInverted(true);
-    followFx.setInverted(true);
-
+  /** Creates a new IntakeSubsystem. */
+  public IntakeSubsystem(IntakeIO io) {
+    this.io = io;
   }
 
   public void setIntakeSpeed(double speed) {
-    mainFx.set(speed);
-    followFx.set(speed);// to make up for lack of follow method now
-
+    io.setIntakeOutput(speed);
   }
 
   public void on() {
@@ -47,12 +38,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    mainFx.set(0);
-    followFx.set(0);
+    setIntakeSpeed(0);
   }
 
   public double getDistance() {
-    return (Math.pow(sharp.getAverageVoltage(), -1.2045)) * 27.726;
+    return (Math.pow(inputs.sharpSensorAverageVoltage, -1.2045)) * 27.726;
   }
 
   public boolean isNoteLoaded() {
@@ -67,8 +57,11 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    io.updateInputs(inputs);
+    Logger.processInputs(getName(), inputs);
+
     SmartDashboard.putNumber("Sensor Reading", getDistance());
     SmartDashboard.putBoolean("isNoteLoaded", isNoteLoaded());
-    SmartDashboard.putNumber("Intake Current", mainFx.getTorqueCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Current", inputs.mainMotorCurrent);
   }
 }

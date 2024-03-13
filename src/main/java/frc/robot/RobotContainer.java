@@ -33,6 +33,8 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
@@ -55,7 +57,7 @@ public class RobotContainer {
 
   private final VisionSubsystem vision = VisionSubsystem.getInstance();
 
-  private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final IntakeSubsystem intake;
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter;
 
@@ -93,9 +95,11 @@ public class RobotContainer {
   public RobotContainer() {
     if (RobotBase.isReal()) {
       // Instantiate IO implementations to talk to real hardware
+      intake = new IntakeSubsystem(new IntakeIOReal());
       shooter = new ShooterSubsystem(new ShooterIOReal());
     } else {
       // Use anonymous classes to create "dummy" IO implementations
+      intake = new IntakeSubsystem(new IntakeIO() {});
       shooter = new ShooterSubsystem(new ShooterIO() {});
     }
     
