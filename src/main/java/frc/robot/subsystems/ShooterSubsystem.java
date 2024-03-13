@@ -24,7 +24,8 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
 
-    main.setInverted(false);
+    main.setInverted(true);
+    
     sub.follow(main, true);
 
     main.setIdleMode(CANSparkMax.IdleMode.kCoast);

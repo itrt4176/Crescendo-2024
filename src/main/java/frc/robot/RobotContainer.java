@@ -7,12 +7,18 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -22,16 +28,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HomeFlipper;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetClimberFlipper;
-import frc.robot.commands.SpeakerShoot;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterSubsystem;
-
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -47,25 +54,35 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "neo"));
 
+  private final VisionSubsystem vision = VisionSubsystem.getInstance();
+
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, -.2);
-  private final Command sShoot = new SpeakerShoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED).deadlineWith(
-      new WaitUntilCommand(() -> !intake.isNoteLoaded())
-        .andThen(new WaitCommand(0.5))
-  );
+  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, Constants.IntakeConstants.INTAKE_SPEED);
+  private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
+    .andThen(new WaitCommand(0.3))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
 
-  private final Command aShoot = new SpeakerShoot(shooter, intake, -.3).deadlineWith(
-      new WaitUntilCommand(() -> !intake.isNoteLoaded())
-        .andThen(new WaitCommand(0.5))
-  );
 
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 180);
-  private final SetClimberFlipper flipperToHome = new SetClimberFlipper(climber, 15);
+  private final Command aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
+    .andThen(new WaitCommand(0.5))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
+
+  private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
+  private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
+
+  
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
+
+  private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
+
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -78,6 +95,8 @@ public class RobotContainer {
 
   private final AbsoluteDrive tuningDriveCommand90;
 
+  private final SendableChooser<Command> autoChooser;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -87,18 +106,14 @@ public class RobotContainer {
      //                                                           () ->  MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_DEADBAND_Y),
      //                                                            null, null, null, null, null, null);
 
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(
-      drivebase,
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+    // FIELD ORIENTED REQUIRES BOTH CONTROLLER X-AXES TO BE INVERTED!
+    Command joystickDrive = drivebase.driveCommand(
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
                                   OperatorConstants.LEFT_DEADBAND_Y),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                                   OperatorConstants.LEFT_DEADBAND_X),
-      () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-                                  OperatorConstants.RIGHT_DEADBAND_X),
-      driverXbox::getYButtonPressed,
-      driverXbox::getAButtonPressed,
-      driverXbox::getXButtonPressed,
-      driverXbox::getBButtonPressed
+      () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
+                                  OperatorConstants.RIGHT_DEADBAND_X)
     );
 
     tuningDriveCommandForward = new AbsoluteDrive(
@@ -118,6 +133,19 @@ public class RobotContainer {
 
     );
 
+    NamedCommands.registerCommand(
+      "speakerShoot",
+      new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
+        .andThen(new WaitCommand(0.25))
+        .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+        .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter))
+    );
+
+    NamedCommands.registerCommand(
+      "intake",
+      new IntakeCommand(intake, -.22)
+    );
+
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -133,10 +161,19 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
         () -> driverController.getRawAxis(2));
 */
-     drivebase.setDefaultCommand(closedAbsoluteDriveAdv);
-    //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+  drivebase.setDefaultCommand(joystickDrive);
+  drivebase.registerVisionPoseCallback(vision::getLimelightEstimatedPose);
+   //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+    
+  if (RobotBase.isSimulation()) {
+    vision.setSimPoseSupplier(drivebase::getPose);
+  }
   
-    configureBindings();
+  configureBindings();
+
+  autoChooser = AutoBuilder.buildAutoChooser();
+
+  SmartDashboard.putData("Auto", autoChooser);
   }
   
 
@@ -157,20 +194,22 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    // driverController.a().toggleOnTrue(intakeCommandD);
+    driverController.a().toggleOnTrue(intakeCommandD);
 
     // driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
 
-    // driverController.y().onTrue(sShoot);
+    driverController.y().toggleOnTrue(sShoot);
 
     
 
-    // driverController.y().onTrue(new SequentialCommandGroup(flipperToAmp, aShoot));
+    driverController.b().onTrue( aShoot);
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
-    // driverController.povDown().onTrue(flipperToHome);
 
-    // driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
-    // driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
+    driverController.povUp().onTrue(ampRoutine);
+    driverController.povDown().onTrue(homeReset);
+
+    //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
+    //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
 
 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
@@ -183,25 +222,39 @@ public class RobotContainer {
     // testDriveController.a().onTrue(tuningDriveCommandForward);
     // testDriveController.y().onTrue(tuningDriveCommand90);
 
-    testDriveController.y().onTrue(new InstantCommand(
+    testDriveController.y().toggleOnTrue(new FunctionalCommand(
       () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(0)),
+      () -> {},
+      (interrupted) -> {},
+      () -> false,
       drivebase
     ));
 
-    testDriveController.b().onTrue(new InstantCommand(
+    testDriveController.b().toggleOnTrue(new FunctionalCommand(
       () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(90)),
+      () -> {},
+      (interrupted) -> {},
+      () -> false,
       drivebase
     ));
 
-    testDriveController.a().onTrue(new InstantCommand(
+    testDriveController.a().toggleOnTrue(new FunctionalCommand(
       () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(180)),
+      () -> {},
+      (interrupted) -> {},
+      () -> false,
       drivebase
     ));
 
-    testDriveController.x().onTrue(new InstantCommand(
+    testDriveController.x().toggleOnTrue(new FunctionalCommand(
       () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(270)),
+      () -> {},
+      (interrupted) -> {},
+      () -> false,
       drivebase
     ));
+
+    
 
     SmartDashboard.putData("SysId Drive", drivebase.sysIdDriveMotorCommand());
     SmartDashboard.putData("SysId Angle", drivebase.sysIdAngleMotorCommand());
@@ -221,9 +274,11 @@ public class RobotContainer {
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
-   */
+   */ 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+
+    return autoChooser.getSelected();
   }
 }
+

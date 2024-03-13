@@ -10,9 +10,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PPLibTelemetry;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -23,10 +26,24 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.DrivebaseConstants.AngularConstants;
+import frc.robot.Constants.DrivebaseConstants.DriveConstants;
+import frc.robot.utils.VisionPoseCallback;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+
+import org.photonvision.EstimatedRobotPose;
+
 // import org.photonvision.PhotonCamera;
 // import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
@@ -41,8 +58,7 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-public class SwerveSubsystem extends SubsystemBase
-{
+public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Swerve drive object.
@@ -52,6 +68,8 @@ public class SwerveSubsystem extends SubsystemBase
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
   public double maximumSpeed = Units.feetToMeters(14.5);
+
+  private Set<VisionPoseCallback> visionCallbacks;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -76,15 +94,19 @@ public class SwerveSubsystem extends SubsystemBase
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
-    } catch (Exception e) {
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
-    // setupPathPlanner();
+    zeroGyro();
+    // swerveDrive.getGyro().setOffset(new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
+    setupPathPlanner();
+
+    visionCallbacks = new HashSet<>(VisionConstants.NUM_CAMERAS);
   }
 
   /**
@@ -100,35 +122,35 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Setup AutoBuilder for PathPlanner.
    */
-  // public void setupPathPlanner()
-  // {
-  //   AutoBuilder.configureHolonomic(
-  //       this::getPose, // Robot pose supplier
-  //       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-  //       this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-  //       this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-  //       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-  //                                        AutonConstants.TRANSLATION_PID,
-  //                                        // Translation PID constants
-  //                                        AutonConstants.ANGLE_PID,
-  //                                        // Rotation PID constants
-  //                                        4.5,
-  //                                        // Max module speed, in m/s
-  //                                        swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-  //                                        // Drive base radius in meters. Distance from robot center to furthest module.
-  //                                        new ReplanningConfig()
-  //                                        // Default path replanning config. See the API for the options here
-  //       ),
-  //       () -> {
-  //         // Boolean supplier that controls when the path will be mirrored for the red alliance
-  //         // This will flip the path being followed to the red side of the field.
-  //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-  //         var alliance = DriverStation.getAlliance();
-  //         return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
-  //       },
-  //       this // Reference to this subsystem to set requirements
-  //                                 );
-  // }
+  public void setupPathPlanner()
+  {
+    AutoBuilder.configureHolonomic(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+          new PIDConstants(DriveConstants.P, DriveConstants.I, DriveConstants.D),
+          // Translation PID constants
+          new PIDConstants(AngularConstants.P, AngularConstants.I, AngularConstants.D),
+          // Rotation PID constants
+          4.5,
+          // Max module speed, in m/s
+          swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+          // Drive base radius in meters. Distance from robot center to furthest module.
+          new ReplanningConfig(true, true)
+          // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          var alliance = DriverStation.getAlliance();
+          return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+  }
 
   /**
    * Aim the robot at the target returned by PhotonVision.
@@ -159,7 +181,13 @@ public class SwerveSubsystem extends SubsystemBase
   public Command getAutonomousCommand(String pathName)
   {
     // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return new PathPlannerAuto(pathName);
+    Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(pathName);
+    return new InstantCommand(() -> { resetOdometry(startingPose); }).andThen(new PathPlannerAuto(pathName));
+    // var path = PathPlannerPath.fromPathFile(pathName);
+    // resetOdometry(path.getPreviewStartingHolonomicPose());
+    // PPLibTelemetry.setCurrentPath(path);
+
+    // return AutoBuilder.followPath(path);
   }
 
   /**
@@ -321,11 +349,18 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    for (VisionPoseCallback callback : visionCallbacks) {
+      callback.apply(getPose()).ifPresent(visionEstimate -> {
+        var visionPose = visionEstimate.estimatedPose.toPose2d();
+        var timestamp = visionEstimate.timestampSeconds;
+        swerveDrive.addVisionMeasurement(visionPose, timestamp);
+      });
+    }
     
-    // SmartDashboard.putNumber("Front Left Velocity", swerveDrive.getModules()[0].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Front Right Velocity", swerveDrive.getModules()[1].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Back Left Velocity", swerveDrive.getModules()[2].getDriveMotor().getVelocity());
-    // SmartDashboard.putNumber("Back Right Velocity", swerveDrive.getModules()[3].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Front Left Velocity", swerveDrive.getModules()[0].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Front Right Velocity", swerveDrive.getModules()[1].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Back Left Velocity", swerveDrive.getModules()[2].getDriveMotor().getVelocity());
+    SmartDashboard.putNumber("Back Right Velocity", swerveDrive.getModules()[3].getDriveMotor().getVelocity());
 
     for (SwerveModule module : swerveDrive.getModules()) {
       int moduleId = module.moduleNumber;
@@ -390,6 +425,10 @@ public class SwerveSubsystem extends SubsystemBase
   public Pose2d getPose()
   {
     return swerveDrive.getPose();
+  }
+
+  public void registerVisionPoseCallback(VisionPoseCallback callback) {
+    visionCallbacks.add(callback);
   }
 
   /**
@@ -543,6 +582,8 @@ public class SwerveSubsystem extends SubsystemBase
    * Manually set all swerve modules to angle for PIDF tuning
    * 
    * @param angle {@link Rotation2d} of the desired angle
+   * 
+   * @see <a href="https://github.com/frc1806/Crescendo-1806/blob/ceaecb6cbf6cf326acfbafe528b6a7146d030af7/src/main/java/frc/robot/commands/Swerve/SnapRotateDrive.java">frc1806/Crescendo-1806</a>
    */
   public void setModulesToAngle(Rotation2d angle) {
     driveFieldOriented(getTargetSpeeds(0, 0, angle));

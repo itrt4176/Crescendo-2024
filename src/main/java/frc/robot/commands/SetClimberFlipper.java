@@ -33,7 +33,7 @@ public class SetClimberFlipper extends Command {
   public void execute() {
     error = setpoint - climber.getFlipDegrees();
 
-    double speed = MathUtil.clamp(error * (.4/ 30.0), -0.4, 0.4);
+    double speed = MathUtil.clamp(error * (.8/ 30.0), -0.8, 0.8);
 
     if (Math.abs(speed) < 0.1) {
       return;

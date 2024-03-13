@@ -179,3 +179,8 @@ ctre_sim/
 
 # GVersion generated build metadata class
 src/main/java/frc/robot/BuildMetadata.java
+
+# Simulation config files
+networktables.json
+simgui-ds.json
+simgui.json
