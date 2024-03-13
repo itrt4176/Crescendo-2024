@@ -47,12 +47,15 @@ public class Robot extends LoggedRobot {
   /**
    * This function is run when the robot is first started up and should be used for any initialization code.
    */
+  @SuppressWarnings("resource")
   @Override
   public void robotInit() {
     Logger.recordMetadata("ProjectName", BuildMetadata.MAVEN_NAME); // Set a metadata value
     Logger.recordMetadata("BuildDate", BuildMetadata.BUILD_DATE);
 
     String branch = BuildMetadata.GIT_BRANCH;
+    
+    // Ignore the warning about comparing identical expressions
     if (BuildMetadata.DIRTY == 1) {
       branch += "*";
     }

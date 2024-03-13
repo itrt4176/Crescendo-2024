@@ -26,20 +26,17 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HomeFlipper;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetClimberFlipper;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -56,7 +53,6 @@ public class RobotContainer {
 
   private final VisionSubsystem vision = VisionSubsystem.getInstance();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intake = new Intake();
   private final Climber climber = new Climber();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
@@ -187,13 +183,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.a().toggleOnTrue(intakeCommandD);
 
     // driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
@@ -202,7 +191,7 @@ public class RobotContainer {
 
     
 
-    driverController.b().onTrue( aShoot);
+    driverController.b().onTrue(aShoot);
     // driverController.y().toggleOnTrue(new StartEndCommand(shooter :: start, shooter :: stop));
 
     driverController.povUp().onTrue(ampRoutine);
