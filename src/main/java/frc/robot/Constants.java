@@ -84,7 +84,8 @@ public final class Constants {
   }
   
   public static final class VisionConstants {
-    public static final String limelightName = "limelight_internal";
+    public static final int NUM_CAMERAS = 2;
+    public static final String LIMELIGHT_NAME = "limelight_internal";
 
     /**
      * The translation of the camera from the robot center on the x-axis.
@@ -96,7 +97,7 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final Measure<Distance> transX = Inches.of(-14);
+    public static final Measure<Distance> TRANS_X = Inches.of(-14);
 
     /**
      * The translation distance of the camera from the robot center on the y-axis.
@@ -109,7 +110,7 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final Measure<Distance> transY = Inches.zero();
+    public static final Measure<Distance> TRANS_Y = Inches.zero();
 
     /**
      * The translation distance of the camera from the robot center on the z-axis.
@@ -122,7 +123,7 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final Measure<Distance> transZ = Inches.of(19.75);
+    public static final Measure<Distance> TRANS_Z = Inches.of(19.75);
 
     
     /**
@@ -138,7 +139,7 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final double roll = 0.0;
+    public static final double ROLL = 0.0;
 
     /**
      * The pitch (rotation around the y-axis) of the camera.
@@ -152,7 +153,7 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final double pitch = Units.degreesToRadians(25.0);
+    public static final double PITCH = Units.degreesToRadians(25.0);
 
     /**
      * The yaw (rotation around the z-axis) of the camera.
@@ -166,6 +167,6 @@ public final class Constants {
      *      WPILib Coordinate System
      *      </a>
      */
-    public static final double yaw = Units.degreesToRadians(180.0);
+    public static final double YAW = Units.degreesToRadians(180.0);
   }
 }

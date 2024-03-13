@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -14,6 +15,12 @@ import frc.robot.Constants.VisionConstants;
 
 import static frc.robot.Constants.VisionConstants.*;
 
+import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -29,18 +36,20 @@ public class VisionSubsystem extends SubsystemBase {
 
   /**
    * 3D position of the camera on the robot according to the <a
-   * href="https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">WPILib Coordinate System</a>.
+   * href=
+   * "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">WPILib
+   * Coordinate System</a>.
    * 
-   * @see VisionConstants#transX
-   * @see VisionConstants#transY
-   * @see VisionConstants#transZ
-   * @see VisionConstants#pitch
-   * @see VisionConstants#roll
-   * @see VisionConstants#yaw
+   * @see VisionConstants#TRANS_X
+   * @see VisionConstants#TRANS_Y
+   * @see VisionConstants#TRANS_Z
+   * @see VisionConstants#PITCH
+   * @see VisionConstants#ROLL
+   * @see VisionConstants#YAW
    */
   private final static Transform3d robotToCam = new Transform3d(
-    new Translation3d(transX, transY, transZ),
-    new Rotation3d(roll, pitch, yaw)
+      new Translation3d(TRANS_X, TRANS_Y, TRANS_Z),
+      new Rotation3d(ROLL, PITCH, YAW)
   );
   
   private PhotonCamera limelight;
@@ -48,7 +57,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   /** Creates a new VisionSubsystem. */
   private VisionSubsystem() {
-    limelight = new PhotonCamera(limelightName);
+    limelight = new PhotonCamera(LIMELIGHT_NAME);
     limelight.setDriverMode(false);
     limelight.setLED(VisionLEDMode.kOff);
 
@@ -58,6 +67,8 @@ public class VisionSubsystem extends SubsystemBase {
       limelight,
       robotToCam
     );  
+
+    poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
   }
 
   public static VisionSubsystem getInstance() {
@@ -80,6 +91,11 @@ public class VisionSubsystem extends SubsystemBase {
   public void disable() {
     enabled = false;
     limelight.setDriverMode(true);
+  }
+
+  public Optional<EstimatedRobotPose> getVisionEstimatedPose(Pose2d currentPoseEstimate) {
+    poseEstimator.setReferencePose(currentPoseEstimate);
+    return poseEstimator.update();
   }
 
   @Override
