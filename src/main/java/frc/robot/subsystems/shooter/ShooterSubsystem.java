@@ -4,19 +4,16 @@
 
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
-import frc.robot.Constants.ShooterConstants;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 public class ShooterSubsystem extends SubsystemBase {
+  @AutoLogOutput
   public boolean running = false;
+
   private final ShooterIO io;
   private final ShooterInputsAutoLogged inputs = new ShooterInputsAutoLogged();
 
@@ -30,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
     io.setShooterOutput(speed);
   }
 
+  @AutoLogOutput(key = "ShooterSubsystem/Speed")
   public double getSpeed() {
     return inputs.mainMotorOutput;
   }
