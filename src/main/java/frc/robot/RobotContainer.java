@@ -34,6 +34,8 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -55,28 +57,22 @@ public class RobotContainer {
 
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final Climber climber = new Climber();
-  private final ShooterSubsystem shooter = new ShooterSubsystem();
+  private final ShooterSubsystem shooter;
 
 
-  private final IntakeCommand intakeCommandD = new IntakeCommand(intake, Constants.IntakeConstants.INTAKE_SPEED);
-  private final Command sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
-    .andThen(new WaitCommand(0.3))
-    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
-    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
+  private final IntakeCommand intakeCommandD;
+  private final Command sShoot;
 
 
-  private final Command aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
-    .andThen(new WaitCommand(0.5))
-    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
-    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
+  private final Command aShoot;
 
-  private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
-  private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
+  private final HomeFlipper home; // used in sequential command 
+  private final HomeFlipper homeReset; //for reseting zero in case
 
   
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
+  private final SetClimberFlipper flipperToAmp;
 
-  private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
+  private final SequentialCommandGroup ampRoutine;
 
   
 
@@ -95,6 +91,32 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if (RobotBase.isReal()) {
+      // Instantiate IO implementations to talk to real hardware
+      shooter = new ShooterSubsystem(new ShooterIOReal());
+    } else {
+      // Use anonymous classes to create "dummy" IO implementations
+      shooter = new ShooterSubsystem(new ShooterIO() {});
+    }
+    
+    intakeCommandD = new IntakeCommand(intake, Constants.IntakeConstants.INTAKE_SPEED);
+    sShoot = new Shoot(shooter, intake, Constants.ShooterConstants.SPEAKER_SHOT_SPEED)
+      .andThen(new WaitCommand(0.3))
+      .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+      .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
+
+    aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
+      .andThen(new WaitCommand(0.5))
+      .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+      .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
+      
+    home = new HomeFlipper(climber);
+    homeReset = new HomeFlipper(climber);
+
+    flipperToAmp = new SetClimberFlipper(climber, 162);
+
+    ampRoutine = new SequentialCommandGroup(flipperToAmp, aShoot, home);
+
     // Configure the trigger bindings
     XboxController driverXbox = new XboxController(0);
 
