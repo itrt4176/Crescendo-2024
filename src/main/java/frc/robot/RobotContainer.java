@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -160,15 +161,19 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
         () -> driverController.getRawAxis(2));
 */
-   drivebase.setDefaultCommand(joystickDrive);
-   drivebase.registerVisionPoseCallback(vision::getLimelightEstimatedPose);
-    //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+  drivebase.setDefaultCommand(joystickDrive);
+  drivebase.registerVisionPoseCallback(vision::getLimelightEstimatedPose);
+   //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+    
+  if (RobotBase.isSimulation()) {
+    vision.setSimPoseSupplier(drivebase::getPose);
+  }
   
-    configureBindings();
+  configureBindings();
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+  autoChooser = AutoBuilder.buildAutoChooser();
 
-    SmartDashboard.putData("Auto", autoChooser);
+  SmartDashboard.putData("Auto", autoChooser);
   }
   
 

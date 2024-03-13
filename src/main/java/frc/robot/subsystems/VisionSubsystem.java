@@ -4,27 +4,32 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.VisionConstants;
-
+import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 import static frc.robot.Constants.VisionConstants.*;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.common.hardware.VisionLEDMode;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase {
   private boolean enabled = true;
@@ -55,6 +60,9 @@ public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera limelight;
   private PhotonPoseEstimator poseEstimator;
 
+  private Supplier<Pose2d> simPoseSupplier = null;
+  private VisionSystemSim visionSim;
+
   /** Creates a new VisionSubsystem. */
   private VisionSubsystem() {
     limelight = new PhotonCamera(LIMELIGHT_NAME);
@@ -69,6 +77,17 @@ public class VisionSubsystem extends SubsystemBase {
     );  
 
     poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
+
+    if (RobotBase.isSimulation()) {
+      visionSim = new VisionSystemSim("main");
+      visionSim.addAprilTags(fieldLayout);
+
+      var simLimelightProps = SimCameraProperties.LL2_960_720();
+      var limelightSim = new PhotonCameraSim(limelight, simLimelightProps);
+      limelightSim.enableDrawWireframe(true);
+
+      visionSim.addCamera(limelightSim, robotToCam);
+    }
   }
 
   public static VisionSubsystem getInstance() {
@@ -102,8 +121,20 @@ public class VisionSubsystem extends SubsystemBase {
     return Optional.empty();
   }
 
+  public void setSimPoseSupplier(Supplier<Pose2d> poseSupplier) {
+    simPoseSupplier = poseSupplier;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    requireNonNull(simPoseSupplier,
+        () -> "simPoseSupplier must not be null! Use VisionSystem.setSimPoseSupplier(Supplier<Pose2d>) to resolve this.");
+    visionSim.update(simPoseSupplier.get());
+    SmartDashboard.putData("VisionSim Field", visionSim.getDebugField());
   }
 }
