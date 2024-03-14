@@ -194,7 +194,7 @@ public class RobotContainer {
 
     
 
-    // driverController.b().toggleOnTrue(new StartEndCommand(intake :: lookIntake, intake :: lookClimber));
+    driverController.a().toggleOnTrue(new StartEndCommand(intake :: lookIntake, intake :: lookClimber));
 
     driverController.b().onTrue(ampRoutine);
 
@@ -216,37 +216,37 @@ public class RobotContainer {
     // testDriveController.a().onTrue(tuningDriveCommandForward);
     // testDriveController.y().onTrue(tuningDriveCommand90);
 
-    testDriveController.y().toggleOnTrue(new FunctionalCommand(
-      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(0)),
-      () -> {},
-      (interrupted) -> {},
-      () -> false,
-      drivebase
-    ));
+    // testDriveController.y().toggleOnTrue(new FunctionalCommand(
+    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(0)),
+    //   () -> {},
+    //   (interrupted) -> {},
+    //   () -> false,
+    //   drivebase
+    // ));
 
-    testDriveController.b().toggleOnTrue(new FunctionalCommand(
-      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(90)),
-      () -> {},
-      (interrupted) -> {},
-      () -> false,
-      drivebase
-    ));
+    // testDriveController.b().toggleOnTrue(new FunctionalCommand(
+    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(90)),
+    //   () -> {},
+    //   (interrupted) -> {},
+    //   () -> false,
+    //   drivebase
+    // ));
 
-    testDriveController.a().toggleOnTrue(new FunctionalCommand(
-      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(180)),
-      () -> {},
-      (interrupted) -> {},
-      () -> false,
-      drivebase
-    ));
+    // testDriveController.a().toggleOnTrue(new FunctionalCommand(
+    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(180)),
+    //   () -> {},
+    //   (interrupted) -> {},
+    //   () -> false,
+    //   drivebase
+    // ));
 
-    testDriveController.x().toggleOnTrue(new FunctionalCommand(
-      () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(270)),
-      () -> {},
-      (interrupted) -> {},
-      () -> false,
-      drivebase
-    ));
+    // testDriveController.x().toggleOnTrue(new FunctionalCommand(
+    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(270)),
+    //   () -> {},
+    //   (interrupted) -> {},
+    //   () -> false,
+    //   drivebase
+    // ));
 
     
 
