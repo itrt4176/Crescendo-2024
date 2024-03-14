@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.8325105372015259,
-        "y": 6.6456209102894395
+        "x": 0.712645975054983,
+        "y": 6.701664967310976
       },
       "prevControl": {
-        "x": 1.3468774807223807,
-        "y": 7.087976481717375
+        "x": 1.2270129185758378,
+        "y": 7.1440205387389115
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "corner-shoot1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
