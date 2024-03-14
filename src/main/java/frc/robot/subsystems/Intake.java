@@ -10,6 +10,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogOutput;
+import edu.wpi.first.wpilibj.AnalogTriggerOutput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SubsystemBase {
@@ -19,6 +22,9 @@ public class Intake extends SubsystemBase {
   private TalonFX mainFx;
   private TalonFX followFx;
   private AnalogInput sharp;
+
+  private Servo rotateCam;
+  private Servo arcCam;
 
   public Intake() {
     mainFx = new TalonFX(Constants.IntakeConstants.INTAKE_MAIN);
@@ -30,6 +36,9 @@ public class Intake extends SubsystemBase {
 
     mainFx.setInverted(true);
     followFx.setInverted(true);
+
+    rotateCam = new Servo(0);
+    arcCam = new Servo(1);
     
   
   }
@@ -74,6 +83,18 @@ public class Intake extends SubsystemBase {
     return false;
   }
 
+  public void lookIntake()
+  {
+    rotateCam.setPosition(.85);
+    arcCam.setPosition(.9);
+  }
+
+  public void lookClimber()
+  {
+    rotateCam.setPosition(0);
+    arcCam.setPosition(.5);
+  }
+
   
 
 
@@ -84,5 +105,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Sensor Reading", getDistance());
     SmartDashboard.putBoolean("isNoteLoaded", isNoteLoaded());
     SmartDashboard.putNumber("Intake Current", mainFx.getTorqueCurrent().getValueAsDouble());
+
+    SmartDashboard.putNumber("Arc Cam Pos", arcCam.getPosition());
+    SmartDashboard.putNumber("Rotate Cam Pos", rotateCam.getPosition());
   }
 }
