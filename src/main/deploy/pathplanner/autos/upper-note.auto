@@ -25,15 +25,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "upper-note-intake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "upper-note-intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "speakerShoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "upper-note-shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "speakerShoot"
+                }
+              }
+            ]
           }
         }
       ]

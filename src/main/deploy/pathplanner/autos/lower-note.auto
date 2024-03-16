@@ -25,21 +25,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "lower-note-intake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "lower-note-intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "lower-note-shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "speakerShoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "lower-note-shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "speakerShoot"
+                }
+              }
+            ]
           }
         }
       ]

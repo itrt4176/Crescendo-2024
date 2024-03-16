@@ -12,16 +12,40 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "upper-note-intake"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "speakerShoot"
+                  "name": "intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "upper-note-shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
           }
         },
         {
