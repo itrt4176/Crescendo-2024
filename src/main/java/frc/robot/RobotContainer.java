@@ -12,8 +12,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -105,10 +107,10 @@ public class RobotContainer {
 
     // FIELD ORIENTED REQUIRES BOTH CONTROLLER X-AXES TO BE INVERTED!
     Command joystickDrive = drivebase.driveCommand(
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
-                                  OperatorConstants.LEFT_DEADBAND_Y),
-      () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
-                                  OperatorConstants.LEFT_DEADBAND_X),
+      () -> applyAllianceInversion( MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                  OperatorConstants.LEFT_DEADBAND_Y)),
+      () -> applyAllianceInversion(MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                  OperatorConstants.LEFT_DEADBAND_X)),
       () -> MathUtil.applyDeadband(-driverXbox.getRightX(),
                                   OperatorConstants.RIGHT_DEADBAND_X)
     );
@@ -273,6 +275,15 @@ public class RobotContainer {
     // An example command will be run in autonomous
 
     return autoChooser.getSelected();
+  }
+
+  private static double applyAllianceInversion(double joystickInput) {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return (alliance.get() == Alliance.Red) ? 1.0 * joystickInput : -1.0 * joystickInput;
+    } else {
+      return -1.0 * joystickInput;
+    }
   }
 }
 
