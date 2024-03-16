@@ -77,7 +77,7 @@ public class Climber extends SubsystemBase {
 
   public boolean isHomed()
   {
-    if(getHomeDistance() < 25.0)
+    if(getHomeDistance() < 15.0)
     {
       return true;
     }
@@ -85,7 +85,7 @@ public class Climber extends SubsystemBase {
   }
 
 public boolean isFullyExtended() {
-  if(getReverseDistance() < 25.0) {
+  if(getReverseDistance() < 15.0) {
     return true;
   }
   return false;
