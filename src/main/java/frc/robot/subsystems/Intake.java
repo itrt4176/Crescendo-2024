@@ -85,14 +85,14 @@ public class Intake extends SubsystemBase {
 
   public void lookIntake()
   {
-    rotateCam.setPosition(.85);
+    rotateCam.setPosition(.1);
     arcCam.setPosition(.5);
   }
 
   public void lookClimber()
   {
-    rotateCam.setPosition(0);
-    arcCam.setPosition(.1);
+    rotateCam.setPosition(0.6);
+    arcCam.setPosition(.35);
   }
 
   
