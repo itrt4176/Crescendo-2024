@@ -12,16 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "speakerShoot"
-                }
-              }
-            ]
+            "name": "speakerShoot"
           }
         },
         {
@@ -47,6 +40,37 @@
           "type": "path",
           "data": {
             "pathName": "middle-note-shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "lower-note-intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "lower-note-shoot"
           }
         },
         {

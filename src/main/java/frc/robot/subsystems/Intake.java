@@ -75,7 +75,7 @@ public class Intake extends SubsystemBase {
 
   public boolean isNoteLoaded()
   {
-    if(getDistance() < 30.0)//placeholder condition that needs to be tested
+    if(getDistance() < 40.0)//placeholder condition that needs to be tested
     {
       return true;
     }
@@ -85,14 +85,14 @@ public class Intake extends SubsystemBase {
 
   public void lookIntake()
   {
-    rotateCam.setPosition(.85);
-    arcCam.setPosition(.9);
+    rotateCam.setPosition(.1);
+    arcCam.setPosition(.5);
   }
 
   public void lookClimber()
   {
-    rotateCam.setPosition(0);
-    arcCam.setPosition(.5);
+    rotateCam.setPosition(0.6);
+    arcCam.setPosition(.35);
   }
 
   

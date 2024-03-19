@@ -3,51 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 5.55
+        "x": 0.7193498096269378,
+        "y": 4.392693697668098
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1766230091357421,
-        "y": 5.55
+        "x": 0.47314805899664114,
+        "y": 2.7308318809135947
       },
       "isLocked": false,
-      "linkedName": "speaker"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 5.553919733431884
+        "x": 7.344396042175544,
+        "y": 0.997871870430457
       },
       "prevControl": {
-        "x": 2.1565145111332855,
-        "y": 5.553919733431884
+        "x": 6.344396042175544,
+        "y": 0.997871870430457
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "middle-note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Slow note",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 540.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
@@ -56,14 +44,14 @@
     "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0,
+    "velocity": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -59.74356283647076,
     "velocity": 0
   },
   "useDefaultConstraints": true
