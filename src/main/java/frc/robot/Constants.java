@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import swervelib.math.Matter;
+import static edu.wpi.first.units.Units.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -70,6 +74,7 @@ public final class Constants {
 
     public static final double SPEAKER_SHOT_SPEED = -.65;
     public static final double AMP_SHOT_SPEED = -.3;
+    public static final double TRAP_TEST_SPEED = -.45;
   }
 
 
@@ -77,5 +82,94 @@ public final class Constants {
     public static final int FORWARD_LIMIT_DIO = 2;
     public static final int REVERSE_LIMIT_DIO = 1;
     public static final double FLIPPER_ROTATIONS_TO_DEGREES = -1.0 * 360.0 / (100.0 * (22.0 / 16.0)); //VERIFY!!!
+    public static final double homeEncoderDegrees = 38; //
+    public static final double upperLimitEncoderDegrees = 238;
+  }
+  
+  public static final class VisionConstants {
+    public static final int NUM_CAMERAS = 2;
+    public static final String LIMELIGHT_NAME = "limelight_internal";
+
+    /**
+     * The translation of the camera from the robot center on the x-axis.
+     * 
+     * <p>The x-axis runs front (positive) to back (negative).
+     * 
+     * @see <a
+     *      href="https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final Measure<Distance> TRANS_X = Inches.of(-14);
+
+    /**
+     * The translation distance of the camera from the robot center on the y-axis.
+     * 
+     * <p>The y-axis runs from left (positive) to right (negative).
+     * 
+     * @see <a
+     *      href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final Measure<Distance> TRANS_Y = Inches.zero();
+
+    /**
+     * The translation distance of the camera from the robot center on the z-axis.
+     * 
+     * <p>The z-axis runs from field carpet (zero) up (positive).
+     * 
+     * @see <a
+     *      href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final Measure<Distance> TRANS_Z = Inches.of(19.75);
+
+    
+    /**
+     * The roll (rotation around the x-axis) of the camera.
+     * 
+     * <p>
+     * Counter-clockwise is positive.
+     * 
+     * @see Rotation3d#Rotation3d(double, double, double) Rotation3d
+     * @see <a
+     *      href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final double ROLL = 0.0;
+
+    /**
+     * The pitch (rotation around the y-axis) of the camera.
+     * 
+     * <p>Counter-clockwise is positive.
+     * 
+     * @see Rotation3d#Rotation3d(double, double, double) Rotation3d
+     * @see <a
+     *      href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final double PITCH = Units.degreesToRadians(20.0);
+
+    /**
+     * The yaw (rotation around the z-axis) of the camera.
+     * 
+     * <p>Counter-clockwise is positive.
+     * 
+     * @see Rotation3d#Rotation3d(double, double, double) Rotation3d
+     * @see <a
+     *      href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#wpilib-coordinate-system">
+     *      WPILib Coordinate System
+     *      </a>
+     */
+    public static final double YAW = Units.degreesToRadians(180.0);
   }
 }
