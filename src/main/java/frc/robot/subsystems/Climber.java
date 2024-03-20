@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -21,61 +22,14 @@ import frc.robot.Constants.ClimberConstants;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static frc.robot.Constants.ClimberConstants.*;
 
-public class Robot extends TimedRobot {
-  private Joystick m_stick;
-  private static final int deviceID = 1;
-  private CANSparkMax m_motor;
-  private RelativeEncoder m_encoder;
-
-  @Override
-  public void robotInit() {
-    // initialize SPARK MAX
-    m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
-
-    /**
-     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
-     * in the SPARK MAX to their factory default state. If no argument is passed, these
-     * parameters will not persist between power cycles
-     */
-    m_motor.restoreFactoryDefaults();
-
-    /**
-    * In order to read encoder values an encoder object is created using the 
-    * getEncoder() method from an existing CANSparkMax object
-    */
-    m_encoder = m_motor.getEncoder();
-
-    m_stick = new Joystick(0);
-  }
-
-  @Override
-  public void teleopPeriodic() {
-    // set the motor output based on jostick position
-    m_motor.set(m_stick.getY());
-
-    /**
-     * Encoder position is read from a RelativeEncoder object by calling the
-     * GetPosition() method.
-     * 
-     * GetPosition() returns the position of the encoder in units of revolutions
-     */
-    SmartDashboard.putNumber("Encoder Position", m_encoder.getPosition());
-
-    /**
-     * Encoder velocity is read from a RelativeEncoder object by calling the
-     * GetVelocity() method.
-     * 
-     * GetVelocity() returns the velocity of the encoder in units of RPM
-     */
-    SmartDashboard.putNumber("Encoder Velocity", m_encoder.getVelocity());
-  }
-}
+import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
@@ -90,6 +44,12 @@ public class Climber extends SubsystemBase {
   // private AnalogInput homeSensor;
   private AnalogInput reverseSensor;
 
+
+  private Joystick m_stick;
+  private static final int deviceID = 7;
+  private CANSparkMax m_motor;
+  private RelativeEncoder m_encoder;
+
   public Climber() {
 
     flipperMain = new TalonFX(20);
@@ -99,6 +59,7 @@ public class Climber extends SubsystemBase {
     forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
     reverseSensor = new AnalogInput(1);
 
+    ClimberEncoderInit()
 
     // winchFollow.follow(winchMain);
     flipperFollow.setInverted(true);
@@ -157,6 +118,36 @@ public boolean isFullyExtended() {
     return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
+@Override
+  public void ClimberEncoderInit() {
+    // initialize SPARK MAX
+    m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
+
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
+     * in the SPARK MAX to their factory default state. If no argument is passed, these
+     * parameters will not persist between power cycles
+     */
+    m_motor.restoreFactoryDefaults();
+
+    /**
+    * In order to read encoder values an encoder object is created using the 
+    * getEncoder() method from an existing CANSparkMax object
+    */
+    m_encoder = m_motor.getEncoder();
+
+    m_stick = new Joystick(0);
+  }
+
+  public double getPosition()
+  {
+    return m_encoder.getPosition();
+  }
+
+  public double getVelocity()
+  {
+    return m_encoder.getVelocity();
+  }
 
   @Override
   public void periodic() {
@@ -170,7 +161,10 @@ public boolean isFullyExtended() {
     // SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
     SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
     SmartDashboard.putBoolean("Switch", forwardLimitSwitch.get());
-
+    SmartDashboard.putNumber("Encoder Position", m_encoder.getPosition());
+    SmartDashboard.putNumber("Encoder Velocity", m_encoder.getVelocity());
   }
+
+  
 }
 
