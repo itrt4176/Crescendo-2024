@@ -76,6 +76,11 @@ public class RobotContainer {
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
     .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
 
+  private final Command tShootTest = new Shoot(shooter, intake, Constants.ShooterConstants.TRAP_TEST_SPEED)
+    .andThen(new WaitCommand(0.5))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), shooter));
+
   private final HomeFlipper home = new HomeFlipper(climber); // used in sequential command 
   private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
 
@@ -202,9 +207,10 @@ public class RobotContainer {
 
     driverController.a().toggleOnTrue(intakeCommandD);
 
-    driverController.x().toggleOnTrue(new StartEndCommand(intake::reverse, intake::stop));
+    driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake::stop));
 
-    driverController.y().toggleOnTrue(sShoot);
+    // driverController.y().toggleOnTrue(sShoot);
+    driverController.y().toggleOnTrue(tShootTest);
 
     driverController.b().onTrue(ampRoutine);
 

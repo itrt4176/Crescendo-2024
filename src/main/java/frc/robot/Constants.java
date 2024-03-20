@@ -74,6 +74,7 @@ public final class Constants {
 
     public static final double SPEAKER_SHOT_SPEED = -.65;
     public static final double AMP_SHOT_SPEED = -.3;
+    public static final double TRAP_TEST_SPEED = -.45;
   }
 
 
