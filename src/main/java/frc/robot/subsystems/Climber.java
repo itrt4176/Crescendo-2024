@@ -27,6 +27,56 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static frc.robot.Constants.ClimberConstants.*;
 
+public class Robot extends TimedRobot {
+  private Joystick m_stick;
+  private static final int deviceID = 1;
+  private CANSparkMax m_motor;
+  private RelativeEncoder m_encoder;
+
+  @Override
+  public void robotInit() {
+    // initialize SPARK MAX
+    m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
+
+    /**
+     * The RestoreFactoryDefaults method can be used to reset the configuration parameters
+     * in the SPARK MAX to their factory default state. If no argument is passed, these
+     * parameters will not persist between power cycles
+     */
+    m_motor.restoreFactoryDefaults();
+
+    /**
+    * In order to read encoder values an encoder object is created using the 
+    * getEncoder() method from an existing CANSparkMax object
+    */
+    m_encoder = m_motor.getEncoder();
+
+    m_stick = new Joystick(0);
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    // set the motor output based on jostick position
+    m_motor.set(m_stick.getY());
+
+    /**
+     * Encoder position is read from a RelativeEncoder object by calling the
+     * GetPosition() method.
+     * 
+     * GetPosition() returns the position of the encoder in units of revolutions
+     */
+    SmartDashboard.putNumber("Encoder Position", m_encoder.getPosition());
+
+    /**
+     * Encoder velocity is read from a RelativeEncoder object by calling the
+     * GetVelocity() method.
+     * 
+     * GetVelocity() returns the velocity of the encoder in units of RPM
+     */
+    SmartDashboard.putNumber("Encoder Velocity", m_encoder.getVelocity());
+  }
+}
+
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
