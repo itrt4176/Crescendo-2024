@@ -139,12 +139,12 @@ public boolean isFullyExtended() {
     m_stick = new Joystick(0);
   }
 
-  public double getPosition()
+  public double getEncoderDegrees()
   {
-    return m_encoder.getPosition();
+    return m_encoder.getPosition() * 360;
   }
 
-  public double getVelocity()
+  public double getEncoderVelocity()
   {
     return m_encoder.getVelocity();
   }
@@ -161,7 +161,7 @@ public boolean isFullyExtended() {
     // SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
     SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
     SmartDashboard.putBoolean("Switch", forwardLimitSwitch.get());
-    SmartDashboard.putNumber("Encoder Position", m_encoder.getPosition());
+    SmartDashboard.putNumber("Encoder Degrees", m_encoder.getPosition() * 360);
     SmartDashboard.putNumber("Encoder Velocity", m_encoder.getVelocity());
   }
 
