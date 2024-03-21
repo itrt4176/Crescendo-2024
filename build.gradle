@@ -31,6 +31,10 @@ deploy {
 
                 // Static files artifact
                 frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
+                    // Delete PathPlanner files from deploy directory on RIO before
+                    // copying deploy directory over. This prevents renamed or deleted
+                    // paths/autos from remaining on the RIO. Be VERY careful with the
+                    // command here because it is executed on the RIO as admin (root)!
                     predeploy << { execute 'if [ -d /home/lvuser/deploy/pathplanner ]; then rm -rf /home/lvuser/deploy/pathplanner/*; fi' }
 
                     files = project.fileTree('src/main/deploy')
