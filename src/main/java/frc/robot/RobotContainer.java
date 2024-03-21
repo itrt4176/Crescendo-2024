@@ -77,7 +77,7 @@ public class RobotContainer {
   private final HomeFlipper homeReset = new HomeFlipper(climber); //for reseting zero in case
 
   
-  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 162);
+  private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 153);
 
   private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(aShoot, home);
 
