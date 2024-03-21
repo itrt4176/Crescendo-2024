@@ -41,26 +41,24 @@ public class Climber extends SubsystemBase {
   private TalonFX flipperFollow;
 
   private DigitalInput forwardLimitSwitch;
-  // private DigitalInput reverseLimitSwitch;
-
-  // private AnalogInput homeSensor;
   private AnalogInput reverseSensor;
 
   private DutyCycleEncoder encoder;
+
+  private boolean encoderForwardLimitReached = false;
+  private boolean encoderReverseLimitReached = false; 
 
   public Climber() {
 
     flipperMain = new TalonFX(20);
     flipperFollow = new TalonFX(21);
     flipperFollow.setControl(new StrictFollower(flipperMain.getDeviceID()));
-    // homeSensor = new AnalogInput(2);
     forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
     reverseSensor = new AnalogInput(1);
 
     encoder = new DutyCycleEncoder(7);
-    encoder.setPositionOffset(37.6/360);
+    encoder.setPositionOffset(.25);
 
-    // winchFollow.follow(winchMain);
     flipperFollow.setInverted(true);
 
     TalonFXConfigurator configurator = flipperMain.getConfigurator();
@@ -75,61 +73,73 @@ public class Climber extends SubsystemBase {
   {
     flipperMain.setControl(
       flipperOutput.withOutput(speed)
-        // .withLimitForwardMotion(isHomed())
-        // .withLimitReverseMotion(isFullyExtended())
     );
   }
 
-  // FIX??? Might not need winch degrees.
   public double getFlipDegrees() 
   {
     return flipperMain.getPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
   }
 
-  public boolean isHomed()
+  public boolean forwardLimitSwitchReached() //forward is home
   {
     return !forwardLimitSwitch.get();
   }
 
-public boolean isFullyExtended() {
-  if(getReverseDistance() < 15.0) {
-    return true;
+  public boolean reverseLimitSwitchReached() {
+    if(getReverseDistance() < 15.0) {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
+
+  public boolean encoderForwardLimitReached() {return encoderForwardLimitReached;}
+  public boolean encoderReverseLimitReached() {return encoderReverseLimitReached;}
 
 
-  public void setZero()
+  public boolean forwardCombinedLimit() {
+    return forwardLimitSwitchReached() || encoderForwardLimitReached();
+  }
+
+  public boolean reverseCombinedLimit() {
+    return reverseLimitSwitchReached() || encoderReverseLimitReached();
+  }
+
+  public void zeroMotors()
   {
      flipperMain.setPosition(0);
      flipperFollow.setPosition(0);
   }
 
-   //Private method, don't use outside of class because flipper neutral mode has to change :)
-
-
-  //  public double getHomeDistance()
-  // {
-  //   return (Math.pow(homeSensor.getAverageVoltage(), -1.2045)) * 27.726;
-  // }
-
   public double getReverseDistance() {
     return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
+  public double getEncoderDegrees() {
+    return encoder.getDistance() * 360.0;
+  }
+
+  // public void resetEncoder() {
+  //   encoder.reset();
+  // }
+
   @Override
   public void periodic() {
   //Constantly checks the limit switches
+  encoderReverseLimitReached = getEncoderDegrees() >= 153+90;
+  encoderForwardLimitReached = getEncoderDegrees() <= 90;
+  
   flipperMain.setControl(
-    flipperOutput.withLimitForwardMotion(!forwardLimitSwitch.get())
-      .withLimitReverseMotion(isFullyExtended())
+    flipperOutput.withLimitForwardMotion(forwardCombinedLimit())
+      .withLimitReverseMotion(reverseCombinedLimit())
   );
+  
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flipper Degrees", flipperMain.getRotorPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES);
     // SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
     SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
     SmartDashboard.putBoolean("Switch", forwardLimitSwitch.get());
-    SmartDashboard.putNumber("Encoder Degrees", ((encoder.getAbsolutePosition() * 360)));
+    SmartDashboard.putNumber("Encoder Degrees", ((encoder.getDistance() * 360)));
   }
 
   

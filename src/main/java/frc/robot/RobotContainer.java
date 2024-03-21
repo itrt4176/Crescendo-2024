@@ -81,8 +81,6 @@ public class RobotContainer {
 
   private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(aShoot, home);
 
-  
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -203,6 +201,9 @@ public class RobotContainer {
     driverController.povUp().onTrue(flipperToAmp);
 
     driverController.povDown().onTrue(homeReset);
+
+    // driverController.povLeft().onTrue(new InstantCommand(climber::resetEncoder));
+
 
     //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
     //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
