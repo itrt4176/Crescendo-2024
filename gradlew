@@ -115,6 +115,13 @@ esac
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 
+if [ msys = true ] || [ cygwin = true ]
+then
+    JAVA_HOME="{JAVA_HOME:-$Public/wpilib/2024/jdk}"
+else
+    JAVA_HOME="${JAVA_HOME:-~/wpilib/2024/jdk}"
+fi
+
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
