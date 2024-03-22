@@ -53,6 +53,6 @@ public class SetClimberFlipper extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(error) <= 1.0;
+    return Math.abs(error) <= 1.0 || climber.reverseCombinedLimit();
   }
 }

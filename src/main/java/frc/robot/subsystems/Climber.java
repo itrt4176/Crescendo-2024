@@ -57,7 +57,7 @@ public class Climber extends SubsystemBase {
     reverseSensor = new AnalogInput(1);
 
     encoder = new DutyCycleEncoder(7);
-    encoder.setPositionOffset(.25);
+    encoder.setPositionOffset(encoderOffset);
 
     flipperFollow.setInverted(true);
 
@@ -115,19 +115,27 @@ public class Climber extends SubsystemBase {
     return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
-  public double getEncoderDegrees() {
-    return encoder.getDistance() * 360.0;
+  //do not use outside of class
+  private double getRawEncoderDegrees() {
+    return encoder.getDistance() * 360;
   }
 
-  // public void resetEncoder() {
-  //   encoder.reset();
-  // }
+  //Only accounts for one revolution of wrapping in either direction
+  public double getEncoderDegrees() {
+    double wrapAdjustment = 0.0;
+    if(getRawEncoderDegrees() > rawEncoderDegCalcUB) {
+      wrapAdjustment = -1.0;
+    } else if(getRawEncoderDegrees() < rawEncoderDegCalcLB) {
+      wrapAdjustment = 1.0;
+    }
+    return (encoder.getDistance() + wrapAdjustment) * -360;
+  }
 
   @Override
   public void periodic() {
   //Constantly checks the limit switches
-  encoderReverseLimitReached = getEncoderDegrees() >= 153+90;
-  encoderForwardLimitReached = getEncoderDegrees() <= 90;
+  encoderReverseLimitReached = getEncoderDegrees() >= reverseEncoderLimitDegrees;
+  encoderForwardLimitReached = getEncoderDegrees() <= 0;
   
   flipperMain.setControl(
     flipperOutput.withLimitForwardMotion(forwardCombinedLimit())
@@ -139,7 +147,13 @@ public class Climber extends SubsystemBase {
     // SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
     SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
     SmartDashboard.putBoolean("Switch", forwardLimitSwitch.get());
-    SmartDashboard.putNumber("Encoder Degrees", ((encoder.getDistance() * 360)));
+    SmartDashboard.putNumber("Encoder Degrees", (getEncoderDegrees()));
+    SmartDashboard.putNumber("Unfiltered Encoder Degrees", (encoder.getDistance() * 360));
+    SmartDashboard.putNumber("Absolute Encoder Degrees", encoder.getAbsolutePosition() * 360);
+    SmartDashboard.putNumber("Absolute Encoder", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Encoder Distance", encoder.getDistance());
+
+
   }
 
   

@@ -36,6 +36,6 @@ public class HomeFlipper extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return climber.encoderForwardLimitReached();
+    return climber.forwardCombinedLimit();
   }
 }

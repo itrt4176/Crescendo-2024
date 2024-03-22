@@ -82,8 +82,14 @@ public final class Constants {
     public static final int FORWARD_LIMIT_DIO = 2;
     public static final int REVERSE_LIMIT_DIO = 1;
     public static final double FLIPPER_ROTATIONS_TO_DEGREES = -1.0 * 360.0 / (100.0 * (22.0 / 16.0)); //VERIFY!!!
-    public static final double homeEncoderDegrees = 38; //
-    public static final double upperLimitEncoderDegrees = 238;
+    public static final double encoderOffset = 23.5/360.0; //returns a value from 1 to 0
+    public static final double reverseEncoderLimitDegrees = 153.0;
+
+    public static final double rawEncoderDegPhysLB = -205.0;
+    public static final double rawEncoderDegPhysUB = 17.0;
+
+    public static final double rawEncoderDegCalcLB = rawEncoderDegPhysLB - 30.0;
+    public static final double rawEncoderDegCalcUB = rawEncoderDegPhysUB + 30.0;
   }
   
   public static final class VisionConstants {
