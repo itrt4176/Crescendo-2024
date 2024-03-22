@@ -12,6 +12,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PPLibTelemetry;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,6 +29,7 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -39,11 +41,15 @@ import frc.robot.Constants.DrivebaseConstants.DriveConstants;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.utils.UnitsITRT.MetersPerMs;
+
+import frc.robot.utils.Utils;
 import frc.robot.utils.VisionPoseCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.DoubleSupplier;
@@ -81,6 +87,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private Pose2d lastPose;
   private double lastPoseUpdate = 0.0;
 
+  private SendableChooser<Command> autoChooser;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -117,7 +125,6 @@ public class SwerveSubsystem extends SubsystemBase {
     setupPathPlanner();
 
     visionCallbacks = new HashSet<>(VisionConstants.NUM_CAMERAS);
-    lastPose = swerveDrive.getPose();
   }
 
   /**
@@ -128,6 +135,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
     swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed);
+    setupPathPlanner();
   }
 
   /**
@@ -141,16 +149,16 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-          new PIDConstants(DriveConstants.P, DriveConstants.I, DriveConstants.D),
-          // Translation PID constants
-          new PIDConstants(AngularConstants.P, AngularConstants.I, AngularConstants.D),
-          // Rotation PID constants
-          4.5,
-          // Max module speed, in m/s
-          swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
-          // Drive base radius in meters. Distance from robot center to furthest module.
-          new ReplanningConfig(true, true)
-          // Default path replanning config. See the API for the options here
+            new PIDConstants(DriveConstants.P, DriveConstants.I, DriveConstants.D),
+            // Translation PID constants
+            new PIDConstants(AngularConstants.P, AngularConstants.I, AngularConstants.D),
+            // Rotation PID constants
+            4.5,
+            // Max module speed, in m/s
+            swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
+            // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig(true, true)
+        // Default path replanning config. See the API for the options here
         ),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -161,6 +169,36 @@ public class SwerveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.onChange(this::postAutoTrajectory);
+  }
+  
+  public SendableChooser<Command> getAutoChooser() {
+    return autoChooser;
+  }
+
+  private void postAutoTrajectory(Command autoCommand) {
+    var field = swerveDrive.field;
+    PathPlannerLogging.setLogActivePathCallback(null);
+    
+    if (autoCommand.getName() != "InstantCommand" && autoCommand.getName() != "None") {
+      var selectedAuto = autoCommand.getName();
+      try {
+        List<PathPlannerPath> autoPaths = PathPlannerAuto.getPathGroupFromAutoFile(selectedAuto);
+
+        var startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(selectedAuto);
+        resetOdometry(startingPose);
+
+        ArrayList<Pose2d> selectedTrajectory = new ArrayList<>();
+
+        for (PathPlannerPath path : autoPaths) {
+          selectedTrajectory.addAll(path.getPathPoses());
+        }
+
+        field.getObject("Trajectory").setPoses(selectedTrajectory);
+      } catch (RuntimeException e) {}
+    }
   }
 
   /**
@@ -394,11 +432,10 @@ public class SwerveSubsystem extends SubsystemBase {
           break;
       }
 
-    SmartDashboard.putNumber("Front Left Module Angle", swerveDrive.getModulePositions()[0].angle.getDegrees());
+      SmartDashboard.putNumber("Front Left Module Angle", swerveDrive.getModulePositions()[0].angle.getDegrees());
 
-    SmartDashboard.putNumber(label + " Current", module.getAngleMotor().getAppliedOutput());
+      SmartDashboard.putNumber(label + " Current", module.getAngleMotor().getAppliedOutput());
     }
-
   }
 
   @Override

@@ -178,7 +178,7 @@ public class RobotContainer {
   
   configureBindings();
 
-  autoChooser = AutoBuilder.buildAutoChooser();
+  autoChooser = drivebase.getAutoChooser();
 
   SmartDashboard.putData("Auto", autoChooser);
   }
