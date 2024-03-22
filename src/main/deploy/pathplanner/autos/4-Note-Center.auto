@@ -24,6 +24,43 @@
               {
                 "type": "path",
                 "data": {
+                  "pathName": "middle-note-intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.01
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle-note-shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "speakerShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
                   "pathName": "upper-note-intake"
                 }
               },
@@ -40,37 +77,6 @@
           "type": "path",
           "data": {
             "pathName": "upper-note-shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "speakerShoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "middle-note-intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middle-note-shoot"
           }
         },
         {

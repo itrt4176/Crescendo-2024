@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase {
-  private boolean enabled = true;
+  private boolean enabled  = false;
 
   private static VisionSubsystem instance = null;
 
@@ -47,9 +47,9 @@ public class VisionSubsystem extends SubsystemBase {
    * 
    * @see VisionConstants#TRANS_X
    * @see VisionConstants#TRANS_Y
-   * @see VisionConstants#TRANS_Z
+   * @see VisionConstants#TRANS_Z1w
    * @see VisionConstants#PITCH
-   * @see VisionConstants#ROLL
+   * @see VisionConstant s#ROLL
    * @see VisionConstants#YAW
    */
   private final static Transform3d robotToCam = new Transform3d(
