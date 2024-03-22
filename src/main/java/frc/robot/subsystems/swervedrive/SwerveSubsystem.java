@@ -23,11 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -81,7 +77,6 @@ public class SwerveSubsystem extends SubsystemBase {
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
   public double maximumSpeed = Units.feetToMeters(14.5);
-  private double msMaxSpeed = MetersPerMs.convertFrom(maximumSpeed, MetersPerSecond);
 
   private Set<VisionPoseCallback> visionCallbacks;
   private Pose2d lastPose;
@@ -402,7 +397,7 @@ public class SwerveSubsystem extends SubsystemBase {
       callback.apply(getPose()).ifPresent(visionEstimate -> {
         var visionPose = visionEstimate.estimatedPose.toPose2d();
         var timestamp = visionEstimate.timestampSeconds;
-        addVisionMeasurement(visionPose, timestamp);
+        swerveDrive.addVisionMeasurement(visionPose, timestamp);
       });
     }
     
@@ -462,8 +457,6 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d initialHolonomicPose)
   {
-    lastPoseUpdate = Timer.getFPGATimestamp();
-    lastPose = initialHolonomicPose;
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -479,24 +472,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void registerVisionPoseCallback(VisionPoseCallback callback) {
     visionCallbacks.add(callback);
-  }
-
-  private void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    if (DriverStation.isDisabled()) {
-      return;
-    }
-    
-    double elapsedTime = timestamp - lastPoseUpdate;
-    Translation2d currentTrans = lastPose.getTranslation();
-
-    double maxDistance = elapsedTime * msMaxSpeed;
-    double poseDistance = currentTrans.getDistance(visionPose.getTranslation());
-
-    if (poseDistance <= maxDistance) {
-      swerveDrive.addVisionMeasurement(visionPose, timestamp);
-      lastPose = getPose();
-      lastPoseUpdate = Timer.getFPGATimestamp();
-    }
   }
 
   /**
@@ -643,7 +618,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * Add a fake vision reading for testing purposes.
    */
   public void addFakeVisionReading() {
-    addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+    swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
   }
 
   /**

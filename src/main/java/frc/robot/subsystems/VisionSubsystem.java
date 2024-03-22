@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase {
-  private boolean enabled = true;
+  private boolean enabled  = false;
 
   private static VisionSubsystem instance = null;
 

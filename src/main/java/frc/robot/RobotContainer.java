@@ -203,7 +203,7 @@ public class RobotContainer {
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     //driverController.a().toggleOnTrue(new StartEndCommand(intake :: lookClimber, intake :: lookIntake));
     
-    driverController.leftTrigger().toggleOnTrue(new StartEndCommand(intake :: lookClimber, intake :: lookIntake));
+    // driverController.leftTrigger().toggleOnTrue(new StartEndCommand(intake :: lookClimber, intake :: lookIntake));
 
     driverController.a().toggleOnTrue(intakeCommandD);
 

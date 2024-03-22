@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 5.55
+        "x": 1.3263028029815465,
+        "y": 5.553919733431884
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7172216800573958,
-        "y": 4.742463219262278
+        "x": 1.6935244830389422,
+        "y": 4.746382952694162
       },
       "isLocked": false,
       "linkedName": "speaker"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.9002656501553608,
-        "y": 3.95
+        "y": 3.909188770758494
       },
       "prevControl": {
         "x": 2.2727379790599183,
-        "y": 3.9499999999999775
+        "y": 3.9091887707584716
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.45,
       "rotationDegrees": 0,
       "rotateFast": false
     }
