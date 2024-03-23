@@ -30,8 +30,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionSubsystem extends SubsystemBase implements Logged {
   private boolean enabled  = false;
 
   private static VisionSubsystem instance = null;
@@ -98,6 +100,7 @@ public class VisionSubsystem extends SubsystemBase {
     return instance;
   }
 
+  @Log
   public boolean isEnabled() {
     return enabled;
   }
