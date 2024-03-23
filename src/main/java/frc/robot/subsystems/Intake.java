@@ -9,13 +9,16 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import monologue.LogLevel;
+import monologue.Logged;
+import monologue.Annotations.Log;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.AnalogTriggerOutput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements Logged {
   /** Creates a new Intake. */
 
 
@@ -68,11 +71,13 @@ public class Intake extends SubsystemBase {
   }
 
 
+  @Log.File
   public double getDistance()
   {
     return (Math.pow(sharp.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
+  @Log
   public boolean isNoteLoaded()
   {
     if(getDistance() < 40.0)//placeholder condition that needs to be tested
@@ -108,8 +113,11 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Current", mainFx.getTorqueCurrent().getValueAsDouble());
 
     SmartDashboard.putNumber("Arc Cam Pos", arcCam.getPosition());
-    SmartDashboard.putNumber("Rotate Cam Pos", rotateCam.getPosition());
+    log("Arc Cam Pos", arcCam.getPosition());
 
-    SmartDashboard.putBoolean("Intake On", mainFx.get() != 0.0);
+    SmartDashboard.putNumber("Rotate Cam Pos", rotateCam.getPosition());
+    log("Rotate Cam Pos", rotateCam.getPosition());
+
+    log("Intake On", mainFx.get() != 0.0, LogLevel.OVERRIDE_FILE_ONLY);
   }
 }
