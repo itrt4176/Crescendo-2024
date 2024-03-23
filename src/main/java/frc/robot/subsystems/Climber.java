@@ -18,6 +18,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants.ClimberConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -28,19 +30,20 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import static frc.robot.Constants.ClimberConstants.*;
 
-public class Climber extends SubsystemBase {
+public class Climber extends SubsystemBase implements Logged {
   /** Creates a new Climber. */
 
   final private DutyCycleOut flipperOutput; // This is nonsense
-  private TalonFX flipperMain;
-  private TalonFX flipperFollow;
+  @Log.File private TalonFX flipperMain;
+  @Log.File private TalonFX flipperFollow;
 
-  private DutyCycleEncoder encoder;
+  @Log.File private DutyCycleEncoder encoder;
 
-  private DigitalInput forwardLimitSwitch;
+  @Log.File private DigitalInput forwardLimitSwitch;
   // private DigitalInput reverseLimitSwitch;
 
   // private AnalogInput homeSensor;
+  @Log.File
   private AnalogInput reverseSensor;
 
   public Climber() {
@@ -75,22 +78,25 @@ public class Climber extends SubsystemBase {
   }
 
   // FIX??? Might not need winch degrees.
+  @Log
   public double getFlipDegrees() 
   {
     return flipperMain.getPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
   }
 
+  @Log.File
   public boolean isHomed()
   {
     return !forwardLimitSwitch.get();
   }
 
-public boolean isFullyExtended() {
-  if(getReverseDistance() < 15.0) {
-    return true;
+  @Log
+  public boolean isFullyExtended() {
+    if(getReverseDistance() < 15.0) {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
 
   public void setZero()
@@ -107,6 +113,7 @@ public boolean isFullyExtended() {
   //   return (Math.pow(homeSensor.getAverageVoltage(), -1.2045)) * 27.726;
   // }
 
+  @Log
   public double getReverseDistance() {
     return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
