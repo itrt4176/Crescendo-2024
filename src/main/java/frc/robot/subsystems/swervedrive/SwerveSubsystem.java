@@ -82,7 +82,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private Pose2d lastPose;
   private double lastPoseUpdate = 0.0;
 
-  private SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser = null;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -164,12 +164,14 @@ public class SwerveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-    autoChooser.onChange(this::postAutoTrajectory);
   }
   
   public SendableChooser<Command> getAutoChooser() {
+    if (autoChooser == null) {
+      autoChooser = AutoBuilder.buildAutoChooser();
+      autoChooser.onChange(this::postAutoTrajectory);
+    }
+
     return autoChooser;
   }
 
