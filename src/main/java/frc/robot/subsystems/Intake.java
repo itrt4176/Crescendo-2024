@@ -104,10 +104,12 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Sensor Reading", getDistance());
-    SmartDashboard.putBoolean("isNoteLoaded", isNoteLoaded());
+    SmartDashboard.putBoolean("Note Loaded", isNoteLoaded());
     SmartDashboard.putNumber("Intake Current", mainFx.getTorqueCurrent().getValueAsDouble());
 
     SmartDashboard.putNumber("Arc Cam Pos", arcCam.getPosition());
     SmartDashboard.putNumber("Rotate Cam Pos", rotateCam.getPosition());
+
+    SmartDashboard.putBoolean("Intake On", mainFx.get() != 0.0);
   }
 }
