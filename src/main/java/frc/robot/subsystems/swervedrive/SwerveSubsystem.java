@@ -85,7 +85,8 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
   private Pose2d lastPose;
   private double lastPoseUpdate = 0.0;
 
-  @Log.File private SendableChooser<Command> autoChooser = null;
+  // @Log.File
+  private SendableChooser<Command> autoChooser = null;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -448,7 +449,7 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
    *
    * @return {@link SwerveDriveKinematics} of the swerve drive.
    */
-  @Log
+  // @Log
   public SwerveDriveKinematics getKinematics()
   {
     return swerveDrive.kinematics;
@@ -471,7 +472,7 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
    *
    * @return The robot's pose
    */
-  @Log
+  // @Log
   public Pose2d getPose()
   {
     return swerveDrive.getPose();
@@ -525,7 +526,7 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
    *
    * @return The yaw angle
    */
-  @Log
+  // @Log
   public Rotation2d getHeading() {
     return getPose().getRotation();
   }
@@ -575,7 +576,7 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
    *
    * @return A ChassisSpeeds object of the current field-relative velocity
    */
-  @Log
+  // @Log
   public ChassisSpeeds getFieldVelocity() {
     return swerveDrive.getFieldVelocity();
   }
@@ -619,7 +620,7 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
    *
    * @return The heading as a {@link Rotation2d} angle
    */
-  @Log
+  // @Log
   public Rotation2d getPitch() {
     return swerveDrive.getPitch();
   }
@@ -642,6 +643,6 @@ public class SwerveSubsystem extends SubsystemBase implements Logged {
     driveFieldOriented(getTargetSpeeds(0, 0, angle));
   }
 
-  @Log
+  // @Log
   private Field2d gameField() { return swerveDrive.field; }
 }

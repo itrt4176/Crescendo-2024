@@ -188,8 +188,7 @@ public class RobotContainer implements Logged {
   SmartDashboard.putData("Auto", autoChooser);
 
   // Setup logging
-  Monologue.setFileOnly(DriverStation.isFMSAttached());
-  Monologue.setupMonologue(this, "DataLogging", false, true);
+  Monologue.setupMonologue(this, "DataLogging", true, true);
   }
   
 
@@ -302,8 +301,8 @@ public class RobotContainer implements Logged {
     return autoChooser.getSelected();
   }
 
-  @Log.File
-  private CommandScheduler commandScheduler = CommandScheduler.getInstance();
+  // @Log.File
+  // private CommandScheduler commandScheduler = CommandScheduler.getInstance();
 
   private static double applyAllianceInversion(double joystickInput) {
     var alliance = DriverStation.getAlliance();

@@ -21,8 +21,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   public int gear = 0;
   public boolean running = false;
 
-  @Log CANSparkFlex main = new CANSparkFlex(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
-  @Log CANSparkFlex sub = new CANSparkFlex(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
+  // @Log 
+  CANSparkFlex main = new CANSparkFlex(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
+  // @Log 
+  CANSparkFlex sub = new CANSparkFlex(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -103,7 +105,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     main.set(speed);
   }
 
-  @Log
+  // @Log
   public double getSpeed()
   {
     return main.get();

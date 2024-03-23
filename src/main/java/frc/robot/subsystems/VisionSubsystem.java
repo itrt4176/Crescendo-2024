@@ -100,7 +100,7 @@ public class VisionSubsystem extends SubsystemBase implements Logged {
     return instance;
   }
 
-  @Log
+  // @Log
   public boolean isEnabled() {
     return enabled;
   }

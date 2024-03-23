@@ -71,13 +71,13 @@ public class Intake extends SubsystemBase implements Logged {
   }
 
 
-  @Log.File
+  // @Log.File
   public double getDistance()
   {
     return (Math.pow(sharp.getAverageVoltage(), -1.2045)) * 27.726;
   }
 
-  @Log
+  // @Log
   public boolean isNoteLoaded()
   {
     if(getDistance() < 40.0)//placeholder condition that needs to be tested

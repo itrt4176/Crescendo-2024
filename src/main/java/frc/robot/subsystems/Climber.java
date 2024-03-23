@@ -34,16 +34,20 @@ public class Climber extends SubsystemBase implements Logged {
   /** Creates a new Climber. */
 
   final private DutyCycleOut flipperOutput; // This is nonsense
-  @Log.File private TalonFX flipperMain;
-  @Log.File private TalonFX flipperFollow;
+  // @Log.File 
+  private TalonFX flipperMain;
+  // @Log.File 
+  private TalonFX flipperFollow;
 
-  @Log.File private DutyCycleEncoder encoder;
+  // @Log.File 
+  private DutyCycleEncoder encoder;
 
-  @Log.File private DigitalInput forwardLimitSwitch;
+  // @Log.File 
+  private DigitalInput forwardLimitSwitch;
   // private DigitalInput reverseLimitSwitch;
 
   // private AnalogInput homeSensor;
-  @Log.File
+  // @Log.File
   private AnalogInput reverseSensor;
 
   public Climber() {
@@ -84,13 +88,13 @@ public class Climber extends SubsystemBase implements Logged {
     return flipperMain.getPosition().getValueAsDouble() * ClimberConstants.FLIPPER_ROTATIONS_TO_DEGREES;
   }
 
-  @Log.File
+  // @Log.File
   public boolean isHomed()
   {
     return !forwardLimitSwitch.get();
   }
 
-  @Log
+  // @Log
   public boolean isFullyExtended() {
     if(getReverseDistance() < 15.0) {
       return true;
@@ -113,7 +117,7 @@ public class Climber extends SubsystemBase implements Logged {
   //   return (Math.pow(homeSensor.getAverageVoltage(), -1.2045)) * 27.726;
   // }
 
-  @Log
+  // @Log
   public double getReverseDistance() {
     return (Math.pow(reverseSensor.getAverageVoltage(), -1.2045)) * 27.726;
   }
