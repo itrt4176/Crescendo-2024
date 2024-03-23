@@ -42,6 +42,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import monologue.Logged;
+import monologue.Monologue;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -51,7 +53,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer implements Logged {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "neo"));
@@ -182,6 +184,10 @@ public class RobotContainer {
   autoChooser = drivebase.getAutoChooser();
 
   SmartDashboard.putData("Auto", autoChooser);
+
+  // Setup logging
+  Monologue.setFileOnly(DriverStation.isFMSAttached());
+  Monologue.setupMonologue(this, "DataLogging", false, true);
   }
   
 
