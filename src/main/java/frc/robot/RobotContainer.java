@@ -210,9 +210,11 @@ public class RobotContainer {
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake::stop));
 
     // driverController.y().toggleOnTrue(sShoot);
-    driverController.y().toggleOnTrue(tShootTest);
+    driverController.y().toggleOnTrue(sShoot);
 
     driverController.b().onTrue(ampRoutine);
+
+    
 
     driverController.povUp().onTrue(flipperToAmp);
 

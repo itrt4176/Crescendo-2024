@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import static frc.robot.Constants.ClimberConstants.*;
 
@@ -33,6 +34,8 @@ public class Climber extends SubsystemBase {
   final private DutyCycleOut flipperOutput; // This is nonsense
   private TalonFX flipperMain;
   private TalonFX flipperFollow;
+
+  private DutyCycleEncoder encoder;
 
   private DigitalInput forwardLimitSwitch;
   // private DigitalInput reverseLimitSwitch;
@@ -49,6 +52,7 @@ public class Climber extends SubsystemBase {
     forwardLimitSwitch = new DigitalInput(FORWARD_LIMIT_DIO);
     reverseSensor = new AnalogInput(1);
 
+    encoder = new DutyCycleEncoder(7);
 
     // winchFollow.follow(winchMain);
     flipperFollow.setInverted(true);
@@ -120,7 +124,7 @@ public boolean isFullyExtended() {
     // SmartDashboard.putNumber("Home Sensor Reading", getHomeDistance());
     SmartDashboard.putNumber("Reverse Sensor Reading", getReverseDistance());
     SmartDashboard.putBoolean("Switch", forwardLimitSwitch.get());
-
+    SmartDashboard.putNumber("Absolute Encoder Degs", encoder.getAbsolutePosition() * 360);
   }
 }
 
