@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import monologue.Logged;
 import monologue.Monologue;
+import monologue.Annotations.Log;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
@@ -299,6 +301,9 @@ public class RobotContainer implements Logged {
 
     return autoChooser.getSelected();
   }
+
+  @Log.File
+  private CommandScheduler commandScheduler = CommandScheduler.getInstance();
 
   private static double applyAllianceInversion(double joystickInput) {
     var alliance = DriverStation.getAlliance();
