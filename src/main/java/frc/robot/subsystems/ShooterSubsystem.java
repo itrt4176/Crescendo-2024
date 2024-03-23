@@ -11,15 +11,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants.ShooterConstants;
+import monologue.Logged;
+import monologue.Annotations.Log;
+
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   public int gear = 0;
   public boolean running = false;
 
-  CANSparkFlex main = new CANSparkFlex(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
-  CANSparkFlex sub = new CANSparkFlex(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
+  @Log CANSparkFlex main = new CANSparkFlex(ShooterConstants.MAIN_SHOOTER, MotorType.kBrushless);
+  @Log CANSparkFlex sub = new CANSparkFlex(ShooterConstants.SUB_SHOOTER, MotorType.kBrushless);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -100,6 +103,7 @@ public class ShooterSubsystem extends SubsystemBase {
     main.set(speed);
   }
 
+  @Log
   public double getSpeed()
   {
     return main.get();
@@ -109,6 +113,9 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Current", main.getOutputCurrent());
+    log("Main Current", main.getOutputCurrent());
+    log("Sub Current", sub.getOutputCurrent());
+    
     SmartDashboard.putNumber("Shooter Speed", getSpeed());
   }
 }
