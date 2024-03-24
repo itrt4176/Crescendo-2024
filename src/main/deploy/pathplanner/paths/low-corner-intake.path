@@ -3,51 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2962452465189287,
-        "y": 5.59
+        "x": 0.7208212897438441,
+        "y": 4.395610614006038
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6634669265763244,
-        "y": 4.7824632192622785
+        "x": 1.4473076984688737,
+        "y": 4.0323674096435225
       },
       "isLocked": false,
-      "linkedName": "speaker"
+      "linkedName": "low-corner-start"
     },
     {
       "anchor": {
-        "x": 2.9002656501553608,
-        "y": 3.93
+        "x": 2.8899783112849433,
+        "y": 4.0737861926851675
       },
       "prevControl": {
-        "x": 2.2727379790599183,
-        "y": 3.929999999999978
+        "x": 2.0050902773663846,
+        "y": 3.912724287242692
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "lower-note"
+      "linkedName": "low-corner-end"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.45,
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Don't ram the stage!",
-      "minWaypointRelativePos": 0.95,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.85,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 540.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
@@ -57,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -59.036243467926475,
     "velocity": 0
   },
   "useDefaultConstraints": true
