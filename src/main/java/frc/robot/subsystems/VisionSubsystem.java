@@ -19,6 +19,7 @@ import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -123,6 +124,10 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void setSimPoseSupplier(Supplier<Pose2d> poseSupplier) {
     simPoseSupplier = poseSupplier;
+  }
+
+  public PhotonPipelineResult getLatestResult() {
+    return limelight.getLatestResult();
   }
 
   @Override
