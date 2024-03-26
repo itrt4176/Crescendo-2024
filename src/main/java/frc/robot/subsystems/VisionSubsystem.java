@@ -133,7 +133,13 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Apriltag Yaw", limelight.getLatestResult().getBestTarget().getYaw()); }
+    if(limelight.getLatestResult().hasTargets()) {
+    SmartDashboard.putNumber("Apriltag Yaw", limelight.getLatestResult().getBestTarget().getYaw());
+    } else {
+      SmartDashboard.putNumber("Apriltag Yaw", 6);
+    }
+    
+  }
 
   @Override
   public void simulationPeriodic() {
