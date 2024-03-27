@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -70,6 +71,10 @@ public class RobotContainer {
     .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
     .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
 
+  private final Command tShoot = new Shoot(shooter, intake, Constants.ShooterConstants.TRAP_SHOT_SPEED)
+    .andThen(new WaitCommand(0.3))
+    .andThen(new InstantCommand(() -> shooter.setShootSpeed(0), shooter))
+    .andThen(new InstantCommand(() -> intake.setIntakeSpeed(0), intake));
 
   private final Command aShoot = new Shoot(shooter, intake, Constants.ShooterConstants.AMP_SHOT_SPEED)
     .andThen(new WaitCommand(0.5))
@@ -154,6 +159,12 @@ public class RobotContainer {
       new IntakeCommand(intake, -.22)
     );
 
+    NamedCommands.registerCommand(
+      "swipe-command",
+        new InstantCommand(() -> shooter.setShootSpeed(-.15), shooter)
+        .andThen(new InstantCommand(() -> intake.setIntakeSpeed(-.22), shooter))
+      );
+
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -210,11 +221,11 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake::stop));
 
-    // driverController.y().toggleOnTrue(sShoot);
     driverController.y().toggleOnTrue(sShoot);
 
     driverController.b().onTrue(ampRoutine);
 
+    driverController.rightTrigger().toggleOnTrue(tShoot);
 
 
     driverController.povUp().onTrue(flipperToAmp);
