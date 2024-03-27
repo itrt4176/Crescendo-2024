@@ -86,7 +86,7 @@ public final class Constants {
   
   public static final class VisionConstants {
     public static final int NUM_CAMERAS = 2;
-    public static final String LIMELIGHT_NAME = "limelight_internal";
+    public static final String LIMELIGHT_NAME = "limelight_integrated";
 
     /**
      * The translation of the camera from the robot center on the x-axis.
