@@ -1,8 +1,15 @@
 {
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
+      "CameraPublisher": {
+        "photonvision_Port_1186_Output_MJPEG_Server": {
+          "open": true
+        }
+      },
       "SmartDashboard": {
-        "open": true,
         "swerve": {
           "double[]##v_/SmartDashboard/swerve/desiredStates": {
             "open": true
@@ -12,10 +19,20 @@
           },
           "open": true
         }
+      },
+      "photonvision": {
+        "limelight_integrated": {
+          "open": true
+        },
+        "limelight_internal": {
+          "open": true
+        },
+        "open": true
       }
     },
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (v6) [9]": "Gyro",
       "/SmartDashboard/SysId Angle": "Command",
@@ -23,10 +40,19 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "photonvision@3": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   },
   "NetworkTables Settings": {
-    "mode": "Client (NT3)",
+    "mode": "Client (NT4)",
     "serverTeam": "4176"
   },
   "Plots": {
@@ -45,7 +71,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 197,
+          "height": 3,
           "name": "Front Left",
           "series": [
             {
@@ -60,8 +86,8 @@
             },
             {
               "color": [
-                0.7666667342185974,
-                0.6176470875740051,
+                0.7666667103767395,
+                0.617647111415863,
                 0.32156863808631897,
                 1.0
               ],
@@ -83,7 +109,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 197,
+          "height": 3,
           "name": "Front Right",
           "series": [
             {
@@ -121,7 +147,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 197,
+          "height": 3,
           "name": "Back Left",
           "series": [
             {
@@ -159,7 +185,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 197,
+          "height": 3,
           "name": "Back Right",
           "series": [
             {
@@ -184,7 +210,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

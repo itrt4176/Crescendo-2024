@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AimAtSpeaker;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HomeFlipper;
@@ -92,6 +93,8 @@ public class RobotContainer {
   private final SetClimberFlipper flipperToAmp = new SetClimberFlipper(climber, 165);
 
   private final SequentialCommandGroup ampRoutine = new SequentialCommandGroup(aShoot, home);
+
+  private final AimAtSpeaker aimAtSpeaker = new AimAtSpeaker(drivebase, vision);
 
   
 
@@ -173,7 +176,7 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_DEADBAND_X),
         () -> driverController.getRawAxis(2));
 */
-  //drivebase.setDefaultCommand(joystickDrive);
+  drivebase.setDefaultCommand(joystickDrive);
   drivebase.registerVisionPoseCallback(vision::getLimelightEstimatedPose);
    //  drivebase.setDefaultCommand(  !RobotBase.isSimulation() driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
     
@@ -214,7 +217,6 @@ public class RobotContainer {
 
     driverController.x().toggleOnTrue(new StartEndCommand(intake :: reverse, intake::stop));
 
-    // driverController.y().toggleOnTrue(sShoot);
     driverController.y().toggleOnTrue(sShoot);
 
     driverController.b().onTrue(ampRoutine);
@@ -223,59 +225,19 @@ public class RobotContainer {
 
     driverController.povDown().onTrue(homeReset);
 
-    //driverController.povDown().toggleOnTrue(new StartEndCommand(climber :: winchRetract, climber :: stopWinch));
-    //driverController.povUp().toggleOnTrue(new StartEndCommand(climber :: winchReverse, climber :: stopWinch));
-
+    driverController.rightTrigger().whileTrue(aimAtSpeaker);
 
     driverController.rightBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(0.3)));
     driverController.rightBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
 
     driverController.leftBumper().whileTrue(new InstantCommand(() -> climber.setFlipSpeed(-0.3)));
     driverController.leftBumper().whileFalse(new InstantCommand(() -> climber.setFlipSpeed(0)));
-    
-    
-    // testDriveController.a().onTrue(tuningDriveCommandForward);
-    // testDriveController.y().onTrue(tuningDriveCommand90);
-
-    // testDriveController.y().toggleOnTrue(new FunctionalCommand(
-    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(0)),
-    //   () -> {},
-    //   (interrupted) -> {},
-    //   () -> false,
-    //   drivebase
-    // ));
-
-    // testDriveController.b().toggleOnTrue(new FunctionalCommand(
-    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(90)),
-    //   () -> {},
-    //   (interrupted) -> {},
-    //   () -> false,
-    //   drivebase
-    // ));
-
-    // testDriveController.a().toggleOnTrue(new FunctionalCommand(
-    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(180)),
-    //   () -> {},
-    //   (interrupted) -> {},
-    //   () -> false,
-    //   drivebase
-    // ));
-
-    // testDriveController.x().toggleOnTrue(new FunctionalCommand(
-    //   () -> drivebase.setModulesToAngle(Rotation2d.fromDegrees(270)),
-    //   () -> {},
-    //   (interrupted) -> {},
-    //   () -> false,
-    //   drivebase
-    // ));
-
-   
 
     SmartDashboard.putData("SysId Drive", drivebase.sysIdDriveMotorCommand());
     SmartDashboard.putData("SysId Angle", drivebase.sysIdAngleMotorCommand());
   }
 
-  public void setDriveMode()
+  @Deprecated public void setDriveMode()
   {
     //drivebase.setDefaultCommand();
   }

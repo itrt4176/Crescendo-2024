@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,9 +35,8 @@ public class AimAtSpeaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    PhotonPipelineResult result = vision.getLatestResult();
-      
-      int speakerID = 7; //defaults to blue alliance
+      //Defaults to blue alliance
+      int speakerID = 7;
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
         if (ally.get() == Alliance.Red) {
@@ -46,27 +46,32 @@ public class AimAtSpeaker extends Command {
             speakerID = 7;
         }
       }
-
-      // Query the latest result from PhotonVision
-      if (result.hasTargets()) {
-          // Calculate angular turn power
-          // -1.0 required to ensure positive PID controller effort _increases_ yaw
-          for(PhotonTrackedTarget target : result.targets) {
-            if (target.getFiducialId() == speakerID) {
-              this.target = target;
-            }
-          }
-      } else {
-        end(false);
-      }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    PhotonPipelineResult result = vision.getLatestResult();
+    target = null;
+
+    // Query the latest result from PhotonVision
+      if (result.hasTargets()) {
+          for(PhotonTrackedTarget target : result.targets) {
+            if (target.getFiducialId() == speakerID) {
+              this.target = target;
+            }
+          }
+          if(target == null) {
+            end(false);
+          }
+      } else {
+        end(false);
+      }
+     //If yaw is negative it needs to turn left. If yaw is positive it needs to turn right.
     error = target.getYaw();
 
-    double rotationSpeed = 0;
+    //30.0 = estimated max yaw
+    double rotationSpeed = Math.pow(MathUtil.clamp((error/30.0) * 0.25, -1, 1), 3);
 
     swerve.driveCommand(
       () -> 0,
