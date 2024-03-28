@@ -22,7 +22,6 @@ public class AimAtSpeaker extends Command {
   private final SwerveSubsystem swerve;
   private final VisionSubsystem vision;
   private int speakerID;
-  private PhotonTrackedTarget target;
   private double error;
 
   public AimAtSpeaker(SwerveSubsystem swerve, VisionSubsystem vision) {
@@ -36,7 +35,7 @@ public class AimAtSpeaker extends Command {
   @Override
   public void initialize() {
       //Defaults to blue alliance
-      int speakerID = 7;
+      speakerID = 7;
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
         if (ally.get() == Alliance.Red) {
@@ -52,32 +51,25 @@ public class AimAtSpeaker extends Command {
   @Override
   public void execute() {
     PhotonPipelineResult result = vision.getLatestResult();
-    target = null;
 
     // Query the latest result from PhotonVision
-      if (result.hasTargets()) {
+      if (result.hasTargets()) { //might not be necessary, check if errors if no targets in camera.
           for(PhotonTrackedTarget target : result.targets) {
             if (target.getFiducialId() == speakerID) {
-              this.target = target;
+              //If yaw is negative it needs to turn left. If yaw is positive it needs to turn right.
+              error = target.getYaw();
+
+              //30.0 = estimated max yaw
+              double rotationSpeed = Math.pow(MathUtil.clamp((error/30.0) * 0.25, -1, 1), 3);
+
+              swerve.driveCommand(
+                () -> 0,
+                () -> 0,
+                () -> rotationSpeed
+              );
             }
           }
-          if(target == null) {
-            end(false);
-          }
-      } else {
-        end(false);
       }
-     //If yaw is negative it needs to turn left. If yaw is positive it needs to turn right.
-    error = target.getYaw();
-
-    //30.0 = estimated max yaw
-    double rotationSpeed = Math.pow(MathUtil.clamp((error/30.0) * 0.25, -1, 1), 3);
-
-    swerve.driveCommand(
-      () -> 0,
-      () -> 0,
-      () -> rotationSpeed
-    );
   }
 
   // Called once the command ends or is interrupted.
